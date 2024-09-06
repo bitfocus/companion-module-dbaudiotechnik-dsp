@@ -11,7 +11,7 @@ module.exports = {
 			name: 'Status - Audio Network Sample Status',
 		})
 
-		for (let i = 1; i <= 64; i++) {
+		/*for (let i = 1; i <= 64; i++) {
 			variables.push({ variableId: `matrixinput${i}_mute`, name: `Matrix Input ${i} - Mute` })
 			variables.push({ variableId: `matrixinput${i}_gain`, name: `Matrix Input ${i} - Gain` })
 			variables.push({ variableId: `matrixinput${i}_delay`, name: `Matrix Input ${i} - Delay` })
@@ -57,9 +57,9 @@ module.exports = {
 				variableId: `matrixoutput${i}_level_meter_post_mute`,
 				name: `Matrix Output ${i} - Level Meter Post Mute`,
 			})
-		}
+		}*/
 
-		for (let i = 1; i <= 64; i++) {
+		/*for (let i = 1; i <= 64; i++) {
 			variables.push({ variableId: `positioning_${i}_source_spread`, name: `Positioning ${i} - Source Spread` })
 			variables.push({
 				variableId: `positioning_${i}_source_delay_mode`,
@@ -77,9 +77,9 @@ module.exports = {
 				variableId: `positioning_${i}_source_position_z`,
 				name: `Positioning ${i} - Source Position Z`,
 			})
-		}
+		}*/
 
-		for (let i = 1; i <= 4; i++) {
+		/*for (let i = 1; i <= 4; i++) {
 			for (let j = 1; j <= 64; j++) {
 				variables.push({
 					variableId: `coordinatemapping_source_position_${i}_${j}_x`,
@@ -94,9 +94,9 @@ module.exports = {
 					name: `Coordinate Mapping ${i} - ${j} - Source Position Z`,
 				})
 			}
-		}
+		}*/
 
-		variables.push({ variableId: 'matrixsettings_reverb_room_id', name: 'Matrix Settings - Reverb Room Id' })
+		/*variables.push({ variableId: 'matrixsettings_reverb_room_id', name: 'Matrix Settings - Reverb Room Id' })
 		variables.push({
 			variableId: 'matrixsettings_reverb_pre_delay_factor',
 			name: 'Matrix Settings - Reverb Pre Delay Factor',
@@ -136,7 +136,7 @@ module.exports = {
 				variableId: `reverbinputprocessing_eq_enable${i}`,
 				name: `Reverb Input Processing ${i} - EQ Enable`,
 			})
-		}
+		}*/
 
 		//scenes
 		variables.push({ variableId: 'scene_index', name: 'Scene Index' })
@@ -144,7 +144,7 @@ module.exports = {
 		variables.push({ variableId: 'scene_comment', name: 'Scene Comment' })
 
 		//sound object routing
-		for (let i = 1; i <= 16; i++) {
+		/*for (let i = 1; i <= 16; i++) {
 			for (let j = 1; j <= 64; j++) {
 				variables.push({
 					variableId: `soundobjectrouting_mute${i}_${j}`,
@@ -155,26 +155,26 @@ module.exports = {
 					name: `Sound Object Routing Gain ${i} - ${j}`,
 				})
 			}
-		}
+		}*/
 
 		//function group
-		for (let i = 1; i <= 16; i++) {
+		/*for (let i = 1; i <= 16; i++) {
 			variables.push({ variableId: `functiongroup_name_${i}`, name: `Function Group Name ${i}` })
 			variables.push({ variableId: `functiongroup_spread_factor${i}`, name: `Function Group Spread Factor ${i}` })
 			variables.push({ variableId: `functiongroup_delay_${i}`, name: `Function Group Delay ${i}` })
-		}
+		}*/
 
 		//speaker positions
-		for (let i = 1; i <= 64; i++) {
+		/*for (let i = 1; i <= 64; i++) {
 			variables.push({ variableId: `speakerposition_x_${i}`, name: `Speaker Position X ${i}` })
 			variables.push({ variableId: `speakerposition_y_${i}`, name: `Speaker Position Y ${i}` })
 			variables.push({ variableId: `speakerposition_z_${i}`, name: `Speaker Position Z ${i}` })
 			variables.push({ variableId: `speakerposition_h_${i}`, name: `Speaker Position H ${i}` })
 			variables.push({ variableId: `speakerposition_v_${i}`, name: `Speaker Position V ${i}` })
-		}
+		}*/
 
 		//coordinate mapping settings
-		for (let i = 1; i <= 4; i++) {
+		/*for (let i = 1; i <= 4; i++) {
 			variables.push({ variableId: `coordinatemapping_p1_real_${i}`, name: `Coordinate Mapping P1 Real ${i}` })
 			variables.push({ variableId: `coordinatemapping_p2_real_${i}`, name: `Coordinate Mapping P2 Real ${i}` })
 			variables.push({ variableId: `coordinatemapping_p3_real_${i}`, name: `Coordinate Mapping P3 Real ${i}` })
@@ -189,7 +189,7 @@ module.exports = {
 			})
 			variables.push({ variableId: `coordinatemapping_flip_${i}`, name: `Coordinate Mapping Flip ${i}` })
 			variables.push({ variableId: `coordinatemapping_name_${i}`, name: `Coordinate Mapping Name ${i}` })
-		}
+		}*/
 
 		self.setVariableDefinitions(variables)
 	},
