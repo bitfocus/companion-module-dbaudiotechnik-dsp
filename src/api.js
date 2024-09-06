@@ -12,13 +12,112 @@ module.exports = {
 
 		if (self.config.host && self.config.host !== '') {
 			self.updateStatus(InstanceStatus.Connecting)
-
+			self.buildDefaultValues()
 			self.initOSC()
 		}
 	},
 
+	buildDefaultValues() {
+		let self = this
+
+		self.DATA = {
+			generalError: 0,
+			errorText: '',
+			deviceName: '',
+			statusText: '',
+			audioNetworkSampleStatus: 0,
+			matrixInput: {},
+			matrixNode: {},
+			matrixOutput: {},
+			positioning: {},
+			coordinateMapping: {},
+			matrixSettings: {},
+			reverbInput: {},
+			reverbInputProcessing: {},
+			sceneIndex: 0,
+			sceneName: '',
+			sceneComment: '',
+			soundObjectRouting: {},
+			functionGroup: {},
+			positioning: {},
+			coordinateMapping: {},
+		}
+
+		for (let i = 1; i <= 64; i++) {
+			self.DATA.matrixInput[i] = {
+				mute: 0,
+				gain: 0,
+				delay: 0,
+				delayEnable: 0,
+				eqEnable: 0,
+				polarity: 0,
+				channelName: '',
+				levelMeterPreMute: 0,
+				levelMeterPostMute: 0,
+				reverbSendGain: 0,
+			}
+			self.DATA.matrixOutput[i] = {
+				mute: 0,
+				gain: 0,
+				delay: 0,
+				delayEnable: 0,
+				eqEnable: 0,
+				polarity: 0,
+				channelName: '',
+				levelMeterPreMute: 0,
+				levelMeterPostMute: 0,
+			}
+			self.DATA.reverbInput[i] = {
+				gain: 0,
+			}
+			self.DATA.reverbInputProcessing[i] = {
+				mute: 0,
+				gain: 0,
+				levelMeter: 0,
+				eqEnable: 0,
+			}
+			self.DATA.functionGroup[i] = {
+				name: '',
+				spreadFactor: 0,
+				delay: 0,
+			}
+			self.DATA.positioning[i] = {
+				sourceSpread: 0,
+				sourceDelayMode: 0,
+				sourcePositionX: 0,
+				sourcePositionY: 0,
+				sourcePositionZ: 0,
+			}
+			
+			for (let j = 1; j <= 64; j++) {
+				self.DATA.matrixNode[i] = {}
+				self.DATA.matrixNode[i][j] = {
+					enable: 0,
+					gain: 0,
+					delayEnable: 0,
+					delay: 0,
+				}
+				
+				self.DATA.soundObjectRouting[i] = {}
+				self.DATA.soundObjectRouting[i][j] = {
+					mute: 0,
+					gain: 0,
+				}
+
+				self.DATA.coordinateMapping[i] = {}
+				self.DATA.coordinateMapping[i][j] = {
+					sourcePositionX: 0,
+					sourcePositionY: 0,
+					sourcePositionZ: 0,
+				}
+			}
+		}
+
+		console.log(self.DATA)
+	},
+
 	initOSC() {
-		var self = this
+		let self = this
 
 		if (self.osc) {
 			try {
@@ -169,7 +268,10 @@ module.exports = {
 				self.log('info', `Sending Command: ${path} with args: ${JSON.stringify(args)}`)
 			}
 
-			self.osc.send(path, args)
+			self.osc.send({
+				address: path,
+				args
+			})
 		}
 	},
 
@@ -183,401 +285,405 @@ module.exports = {
 		if (self.config.verbose) {
 			self.log('debug', `OSC Content is: ${JSON.stringify(oscMsg)}`)
 		}
+		try {
+			let variableObj = {}
 
-		let variableObj = {}
+			if (address.indexOf('/error/gnrlerr') !== -1) {
+				self.DATA.generalError = value
+				variableObj = { general_error: value }
 
-		if (address.indexOf('/error/gnrlerr') !== -1) {
-			self.DATA.generalError = value
-			variableObj = { general_error: value }
+				if (value === 0) {
+					//ok
+				} else {
+					//error
+					self.log('error', `General Error has occurred.`)
+				}
+			} else if (address.indexOf('/error/errortext') !== -1) {
+				self.DATA.errorText = value
+				variableObj = { error_text: value }
 
-			if (value === 0) {
-				//ok
-			} else {
-				//error
-				self.log('error', `General Error has occurred.`)
+				if (value !== '') {
+					self.log('error', `Error Text: ${value}`)
+				}
+			} else if (address.indexOf('/settings/devicename') !== -1) {
+				self.DATA.deviceName = value
+				variableObj = { settings_device_name: value }
+			} else if (address.indexOf('/status/statustext') !== -1) {
+				self.DATA.statusText = value
+				variableObj = { status_text: value }
+			} else if (address.indexOf('/status/audionetworksamplestatus') !== -1) {
+				self.DATA.audioNetworkSampleStatus = value
+				let valueFriendly = ''
+				if (value === 4) {
+					valueFriendly = '48 kHz'
+				} else if (value === 6) {
+					valueFriendly = '96 kHz'
+				} else if (value === 1) {
+					valueFriendly = 'Not in Sync'
+				}
+
+				variableObj = { status_audio_network_sample_status: value }
+			} else if (address.indexOf('/matrixinput/mute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].mute = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixinput${id}_mute`]: valueFriendly }
+			} else if (address.indexOf('/matrixinput/gain/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].gain = value
+				variableObj = { [`matrixinput${id}_gain`]: value }
+			} else if (address.indexOf('/matrixinput/delay/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].delay = value
+				variableObj = { [`matrixinput${id}_delay`]: value }
+			} else if (address.indexOf('/matrixinput/delayenable/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].delayEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixinput${id}_delay_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixinput/eqenable/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].eqEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixinput${id}_eq_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixinput/polarity/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].polarity = value
+				let valueFriendly = value === 0 ? 'Normal' : 'Reversed'
+				variableObj = { [`matrixinput${id}_polarity`]: valueFriendly }
+			} else if (address.indexOf('/matrixinput/channelname/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].channelName = value
+				variableObj = { [`matrixinput${id}_channel_name`]: value }
+			} else if (address.indexOf('/matrixinput/levelmeterpremute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].levelMeterPreMute = value
+				variableObj = { [`matrixinput${id}_level_meter_pre_mute`]: value }
+			} else if (address.indexOf('/matrixinput/levelmeterpostmute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].levelMeterPostMute = value
+				variableObj = { [`matrixinput${id}_level_meter_post_mute`]: value }
+			} /*else if (address.indexOf('/matrixnode/enable/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.matrixNode[id][id2].enable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixnode${id}_${id2}_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixnode/gain/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.matrixNode[id][id2].gain = value
+				variableObj = { [`matrixnode${id}_{id2}_gain`]: value }
+			} else if (address.indexOf('/matrixnode/delayenable/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.matrixNode[id][id2].delayEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixnode${id}_${id2}_delay_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixnode/delay/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.matrixNode[id][id2].delay = value
+				variableObj = { [`matrixnode${id}_${id2}_delay`]: value }
+			} else if (address.indexOf('/matrixoutput/mute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].mute = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixoutput${id}_mute`]: valueFriendly }
+			} */ else if (address.indexOf('/matrixoutput/gain/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].gain = value
+				variableObj = { [`matrixoutput${id}_gain`]: value }
+			} else if (address.indexOf('/matrixoutput/delay/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].delay = value
+				variableObj = { [`matrixoutput${id}_delay`]: value }
+			} else if (address.indexOf('/matrixoutput/delayenable/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].delayEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixoutput${id}_delay_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixoutput/eqenable/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].eqEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixoutput${id}_eq_enable`]: valueFriendly }
+			} else if (address.indexOf('/matrixoutput/polarity/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].polarity = value
+				let valueFriendly = value === 0 ? 'Normal' : 'Reversed'
+				variableObj = { [`matrixoutput${id}_polarity`]: valueFriendly }
+			} else if (address.indexOf('/matrixoutput/channelname/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].channelName = value
+				variableObj = { [`matrixoutput${id}_channel_name`]: value }
+			} else if (address.indexOf('/matrixoutput/levelmeterpremute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].levelMeterPreMute = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixoutput${id}_level_meter_pre_mute`]: valueFriendly }
+			} else if (address.indexOf('/matrixoutput/levelmeterpostmute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixOutput[id].levelMeterPostMute = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`matrixoutput${id}_level_meter_post_mute`]: valueFriendly }
+			} else if (address.indexOf('/positioning/source_spread/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.positioning[id].sourceSpread = value
+				variableObj = { [`positioning_${id}_source_spread`]: value }
+			} else if (address.indexOf('/positioning/source_delaymode/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.positioning[id].sourceDelayMode = value
+				let valueFriendly = ''
+				if (value === 0) {
+					valueFriendly = 'Off'
+				} else if (value === 1) {
+					valueFriendly = 'Tight'
+				} else if (value === 2) {
+					valueFriendly = 'Full'
+				}
+				variableObj = { [`positioning_${id}source_delay_mode`]: valueFriendly }
+			} else if (address.indexOf('/positioning/source_position/') !== -1) {
+				let id = address.split('/')[4]
+
+				const arg1 = oscMsg['args'][0]
+				const arg2 = oscMsg['args'][1]
+				const arg3 = oscMsg['args'][2]
+				const value1 = arg1['value']
+				const value2 = arg2['value']
+				const value3 = arg3['value']
+
+				self.DATA.positioning.sourcePositionX = value1
+				self.DATA.positioning.sourcePositionY = value2
+				self.DATA.positioning.sourcePositionZ = value3
+				variableObj = {
+					positioning_source_position_x: value1,
+					positioning_source_position_y: value2,
+					positioning_source_position_z: value3,
+				}
+			} else if (address.indexOf('/positioning/source_position_xy/') !== -1) {
+				const arg1 = oscMsg['args'][0]
+				const arg2 = oscMsg['args'][1]
+				const value1 = arg1['value']
+				const value2 = arg2['value']
+
+				self.DATA.positioning.sourcePositionX = value1
+				self.DATA.positioning.sourcePositionY = value2
+				variableObj = {
+					positioning_source_position_x: value1,
+					positioning_source_position_y: value2,
+				}
+			} else if (address.indexOf('/positioning/source_position_x/') !== -1) {
+				const arg1 = oscMsg['args'][0]
+				const value1 = arg1['value']
+
+				self.DATA.positioning.sourcePositionX = value1
+				variableObj = {
+					positioning_source_position_x: value1,
+				}
+			} else if (address.indexOf('/positioning/source_position_y/') !== -1) {
+				const arg1 = oscMsg['args'][0]
+				const value1 = arg1['value']
+
+				self.DATA.positioning.sourcePositionY = value1
+				variableObj = {
+					positioning_source_position_y: value1,
+				}
+			} else if (address.indexOf('/coordinatemapping/source_position/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+
+				const arg1 = oscMsg['args'][0]
+				const arg2 = oscMsg['args'][1]
+				const arg3 = oscMsg['args'][2]
+				const value1 = arg1['value']
+				const value2 = arg2['value']
+				const value3 = arg3['value']
+
+				self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
+				self.DATA.coordinateMapping[id][id2].sourcePositionY = value2
+				self.DATA.coordinateMapping[id][id2].sourcePositionZ = value3
+				variableObj = {
+					[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
+					[`coordinatemapping_source_position_${id}_${id2}_y`]: value2,
+					[`coordinatemapping_source_position_${id}_${id2}_z`]: value3,
+				}
+			} else if (address.indexOf('/coordinatemapping/source_position_xy/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+
+				const arg1 = oscMsg['args'][0]
+				const arg2 = oscMsg['args'][1]
+				const value1 = arg1['value']
+				const value2 = arg2['value']
+
+				self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
+				self.DATA.coordinateMapping[id][id2].sourcePositionY = value2
+				variableObj = {
+					[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
+					[`coordinatemapping_source_position_${id}_${id2}_y`]: value2,
+				}
+			} else if (address.indexOf('/coordinatemapping/source_position_x/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+
+				const arg1 = oscMsg['args'][0]
+				const value1 = arg1['value']
+
+				self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
+				variableObj = {
+					[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
+				}
+			} else if (address.indexOf('/coordinatemapping/source_position_y/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				const arg1 = oscMsg['args'][0]
+				const value1 = arg1['value']
+
+				self.DATA.coordinateMapping[id][id2].sourcePositionY = value1
+				variableObj = {
+					[`coordinatemapping_source_position_${id}_${id2}_y`]: value1,
+				}
+			} else if (address.indexOf('/matrixsettings/reverbroomid') !== -1) {
+				self.DATA.matrixSettings.reverbRoomId = value
+
+				//find it in choices_reverb_rooms
+				let valueFriendly = ''
+				let reverbRoomObj = self.CHOICES_REVERB_ROOMS.find((item) => item.id === value)
+				if (reverbRoomObj) {
+					valueFriendly = valueFriendly.label
+				}
+				variableObj = { matrixsettings_reverb_room_id: valueFriendly }
+			} else if (address.indexOf('/matrixsettings/reverbpredelayfactor') !== -1) {
+				self.DATA.matrixSettings.reverbPreDelayFactor = value
+				variableObj = { matrixsettings_reverb_pre_delay_factor: value }
+			} else if (address.indexOf('/matrixsettings/reverbrearlevel') !== -1) {
+				self.DATA.matrixSettings.reverbRearLevel = value
+				variableObj = { matrixsettings_reverb_rear_level: value }
+			} else if (address.indexOf('/matrixinput/reverbsendgain/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.matrixInput[id].reverbSendGain = value
+				variableObj = { [`matrixinput${id}_reverb_send_gain`]: value }
+			} else if (address.indexOf('/reverbinput/gain/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.reverbInput[id].gain = value
+				variableObj = { [`reverbinput_gain_${id}_zone${id2}`]: value }
+			} else if (address.indexOf('/reverbinputprocessing/mute/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.reverbInputProcessing[id].mute = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`reverbinputprocessing_mute_${id}`]: valueFriendly }
+			} else if (address.indexOf('/reverbinputprocessing/gain/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.reverbInputProcessing[id].gain = value
+				variableObj = { [`reverbinputprocessing_gain_${id}`]: value }
+			} else if (address.indexOf('/reverbinputprocessing/levelmeter/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.reverbInputProcessing[id].levelMeter = value
+				variableObj = { [`reverbinputprocessing_level_meter_${id}`]: value }
+			} else if (address.indexOf('/reverbinputprocessing/eqenable/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.reverbInputProcessing[id].eqEnable = value
+				let valueFriendly = value === 1 ? 'On' : 'Off'
+				variableObj = { [`reverbinputprocessing_eq_enable_${id}`]: valueFriendly }
+			} else if (address.indexOf('/scene/sceneindex') !== -1) {
+				self.DATA.sceneIndex = value
+				variableObj = { scene_index: value }
+			} else if (address.indexOf('/scene/scenename') !== -1) {
+				self.DATA.sceneName = value
+				variableObj = { scene_name: value }
+			} else if (address.indexOf('/scene/scenecomment') !== -1) {
+				self.DATA.sceneComment = value
+				variableObj = { scene_comment: value }
+			} else if (address.indexOf('/soundobjectrouting/mute/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.soundObjectRouting[id][id2].mute = value
+				variableObj = { [`soundobjectrouting_mute_${id}_${id2}`]: value }
+			} else if (address.indexOf('/soundobjectrouting/gain/') !== -1) {
+				let id = address.split('/')[4]
+				let id2 = address.split('/')[4]
+				self.DATA.soundObjectRouting[id][id2].gain = value
+				variableObj = { [`soundobjectrouting_gain_${id}_${id2}`]: value }
+			} else if (address.indexOf('/functiongroup/name/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.functionGroup[id].name = value
+				variableObj = { [`functiongroup_name_${id}`]: value }
+			} else if (address.indexOf('/functiongroup/spreadfactor/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.functionGroup[id].spreadFactor = value
+				variableObj = { [`functiongroup_spread_factor_${id}`]: value }
+			} else if (address.indexOf('/functiongroup/delay/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.functionGroup[id].delay = value
+				variableObj = { [`functiongroup_delay_${id}`]: value }
+			} else if (address.indexOf('/positioning/speaker_position/') !== -1) {
+				let id = address.split('/')[4]
+
+				const arg1 = oscMsg['args'][0]
+				const arg2 = oscMsg['args'][1]
+				const arg3 = oscMsg['args'][2]
+				const arg4 = oscMsg['args'][3]
+				const arg5 = oscMsg['args'][4]
+
+				const value1 = arg1['value']
+				const value2 = arg2['value']
+				const value3 = arg3['value']
+				const value4 = arg4['value']
+				const value5 = arg5['value']
+
+				self.DATA.positioning.speakerPosition[id].x = value1
+				self.DATA.positioning.speakerPosition[id].y = value2
+				self.DATA.positioning.speakerPosition[id].z = value3
+				self.DATA.positioning.speakerPosition[id].h = value4
+				self.DATA.positioning.speakerPosition[id].v = value5
+
+				variableObj = {
+					[`speakerposition_x_${id}`]: value1,
+					[`speakerposition_y_${id}`]: value2,
+					[`speakerposition_z_${id}`]: value3,
+					[`speakerposition_h_${id}`]: value4,
+					[`speakerposition_v_${id}`]: value5,
+				}
+			} else if (address.indexOf('/coordinatemappingsettings/p1_real/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p1Real[id] = value
+				variableObj = { [`coordinatemappingsettings_p1_real_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/p2_real/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p2Real[id] = value
+				variableObj = { [`coordinatemappingsettings_p2_real_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/p3_real/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p3Real[id] = value
+				variableObj = { [`coordinatemappingsettings_p3_real_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/p4_real/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p4Real[id] = value
+				variableObj = { [`coordinatemappingsettings_p4_real_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/p1_virtual/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p1Virtual[id] = value
+				variableObj = { [`coordinatemappingsettings_p1_virtual_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/p3_virtual/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.p3Virtual[id] = value
+				variableObj = { [`coordinatemappingsettings_p3_virtual_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/flip/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.flip[id] = value
+				variableObj = { [`coordinatemappingsettings_flip_${id}`]: value }
+			} else if (address.indexOf('/coordinatemappingsettings/name/') !== -1) {
+				let id = address.split('/')[4]
+				self.DATA.coordinateMappingSettings.name[id] = value
+				variableObj = { [`coordinatemappingsettings_name_${id}`]: value }
 			}
-		} else if (address.indexOf('/error/errortext') !== -1) {
-			self.DATA.errorText = value
-			variableObj = { error_text: value }
 
-			if (value !== '') {
-				self.log('error', `Error Text: ${value}`)
-			}
-		} else if (address.indexOf('/settings/devicename') !== -1) {
-			self.DATA.deviceName = value
-			variableObj = { settings_device_name: value }
-		} else if (address.indexOf('/status/statustext') !== -1) {
-			self.DATA.statusText = value
-			variableObj = { status_text: value }
-		} else if (address.indexOf('/status/audionetworksamplestatus') !== -1) {
-			self.DATA.audioNetworkSampleStatus = value
-			let valueFriendly = ''
-			if (value === 4) {
-				valueFriendly = '48 kHz'
-			} else if (value === 6) {
-				valueFriendly = '96 kHz'
-			} else if (value === 1) {
-				valueFriendly = 'Not in Sync'
-			}
-
-			variableObj = { status_audio_network_sample_status: value }
-		} else if (address.indexOf('/matrixinput/mute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].mute = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixinput${id}_mute`]: valueFriendly }
-		} else if (address.indexOf('/matrixinput/gain/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].gain = value
-			variableObj = { [`matrixinput${id}_gain`]: value }
-		} else if (address.indexOf('/matrixinput/delay/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].delay = value
-			variableObj = { [`matrixinput${id}_delay`]: value }
-		} else if (address.indexOf('/matrixinput/delayenable/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].delayEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixinput${id}_delay_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixinput/eqenable/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].eqEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixinput${id}_eq_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixinput/polarity/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].polarity = value
-			let valueFriendly = value === 0 ? 'Normal' : 'Reversed'
-			variableObj = { [`matrixinput${id}_polarity`]: valueFriendly }
-		} else if (address.indexOf('/matrixinput/channelname/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].channelName = value
-			variableObj = { [`matrixinput${id}_channel_name`]: value }
-		} else if (address.indexOf('/matrixinput/levelmeterpremute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].levelMeterPreMute = value
-			variableObj = { [`matrixinput${id}_level_meter_pre_mute`]: value }
-		} else if (address.indexOf('/matrixinput/levelmeterpostmute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].levelMeterPostMute = value
-			variableObj = { [`matrixinput${id}_level_meter_post_mute`]: value }
-		} else if (address.indexOf('/matrixnode/enable/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.matrixNode[id][id2].enable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixnode${id}_${id2}_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixnode/gain/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.matrixNode[id][id2].gain = value
-			variableObj = { [`matrixnode${id}_{id2}_gain`]: value }
-		} else if (address.indexOf('/matrixnode/delayenable/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.matrixNode[id][id2].delayEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixnode${id}_${id2}_delay_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixnode/delay/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.matrixNode[id][id2].delay = value
-			variableObj = { [`matrixnode${id}_${id2}_delay`]: value }
-		} else if (address.indexOf('/matrixoutput/mute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].mute = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixoutput${id}_mute`]: valueFriendly }
-		} else if (address.indexOf('/matrixoutput/gain/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].gain = value
-			variableObj = { [`matrixoutput${id}_gain`]: value }
-		} else if (address.indexOf('/matrixoutput/delay/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].delay = value
-			variableObj = { [`matrixoutput${id}_delay`]: value }
-		} else if (address.indexOf('/matrixoutput/delayenable/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].delayEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixoutput${id}_delay_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixoutput/eqenable/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].eqEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixoutput${id}_eq_enable`]: valueFriendly }
-		} else if (address.indexOf('/matrixoutput/polarity/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].polarity = value
-			let valueFriendly = value === 0 ? 'Normal' : 'Reversed'
-			variableObj = { [`matrixoutput${id}_polarity`]: valueFriendly }
-		} else if (address.indexOf('/matrixoutput/channelname/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].channelName = value
-			variableObj = { [`matrixoutput${id}_channel_name`]: value }
-		} else if (address.indexOf('/matrixoutput/levelmeterpremute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].levelMeterPreMute = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixoutput${id}_level_meter_pre_mute`]: valueFriendly }
-		} else if (address.indexOf('/matrixoutput/levelmeterpostmute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixOutput[id].levelMeterPostMute = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`matrixoutput${id}_level_meter_post_mute`]: valueFriendly }
-		} else if (address.indexOf('/positioning/source_spread/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.positioning[id].sourceSpread = value
-			variableObj = { [`positioning_${id}_source_spread`]: value }
-		} else if (address.indexOf('/positioning/source_delaymode/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.positioning[i].sourceDelayMode = value
-			let valueFriendly = ''
-			if (value === 0) {
-				valueFriendly = 'Off'
-			} else if (value === 1) {
-				valueFriendly = 'Tight'
-			} else if (value === 2) {
-				valueFriendly = 'Full'
-			}
-			variableObj = { [`positioning_${id}source_delay_mode`]: valueFriendly }
-		} else if (address.indexOf('/positioning/source_position/') !== -1) {
-			let id = address.split('/')[3]
-
-			const arg1 = oscMsg['args'][0]
-			const arg2 = oscMsg['args'][1]
-			const arg3 = oscMsg['args'][2]
-			const value1 = arg1['value']
-			const value2 = arg2['value']
-			const value3 = arg3['value']
-
-			self.DATA.positioning.sourcePositionX = value1
-			self.DATA.positioning.sourcePositionY = value2
-			self.DATA.positioning.sourcePositionZ = value3
-			variableObj = {
-				positioning_source_position_x: value1,
-				positioning_source_position_y: value2,
-				positioning_source_position_z: value3,
-			}
-		} else if (address.indexOf('/positioning/source_position_xy/') !== -1) {
-			const arg1 = oscMsg['args'][0]
-			const arg2 = oscMsg['args'][1]
-			const value1 = arg1['value']
-			const value2 = arg2['value']
-
-			self.DATA.positioning.sourcePositionX = value1
-			self.DATA.positioning.sourcePositionY = value2
-			variableObj = {
-				positioning_source_position_x: value1,
-				positioning_source_position_y: value2,
-			}
-		} else if (address.indexOf('/positioning/source_position_x/') !== -1) {
-			const arg1 = oscMsg['args'][0]
-			const value1 = arg1['value']
-
-			self.DATA.positioning.sourcePositionX = value1
-			variableObj = {
-				positioning_source_position_x: value1,
-			}
-		} else if (address.indexOf('/positioning/source_position_y/') !== -1) {
-			const arg1 = oscMsg['args'][0]
-			const value1 = arg1['value']
-
-			self.DATA.positioning.sourcePositionY = value1
-			variableObj = {
-				positioning_source_position_y: value1,
-			}
-		} else if (address.indexOf('/coordinatemapping/source_position/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-
-			const arg1 = oscMsg['args'][0]
-			const arg2 = oscMsg['args'][1]
-			const arg3 = oscMsg['args'][2]
-			const value1 = arg1['value']
-			const value2 = arg2['value']
-			const value3 = arg3['value']
-
-			self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
-			self.DATA.coordinateMapping[id][id2].sourcePositionY = value2
-			self.DATA.coordinateMapping[id][id2].sourcePositionZ = value3
-			variableObj = {
-				[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
-				[`coordinatemapping_source_position_${id}_${id2}_y`]: value2,
-				[`coordinatemapping_source_position_${id}_${id2}_z`]: value3,
-			}
-		} else if (address.indexOf('/coordinatemapping/source_position_xy/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-
-			const arg1 = oscMsg['args'][0]
-			const arg2 = oscMsg['args'][1]
-			const value1 = arg1['value']
-			const value2 = arg2['value']
-
-			self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
-			self.DATA.coordinateMapping[id][id2].sourcePositionY = value2
-			variableObj = {
-				[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
-				[`coordinatemapping_source_position_${id}_${id2}_y`]: value2,
-			}
-		} else if (address.indexOf('/coordinatemapping/source_position_x/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-
-			const arg1 = oscMsg['args'][0]
-			const value1 = arg1['value']
-
-			self.DATA.coordinateMapping[id][id2].sourcePositionX = value1
-			variableObj = {
-				[`coordinatemapping_source_position_${id}_${id2}_x`]: value1,
-			}
-		} else if (address.indexOf('/coordinatemapping/source_position_y/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			const arg1 = oscMsg['args'][0]
-			const value1 = arg1['value']
-
-			self.DATA.coordinateMapping[id][id2].sourcePositionY = value1
-			variableObj = {
-				[`coordinatemapping_source_position_${id}_${id2}_y`]: value1,
-			}
-		} else if (address.indexOf('/matrixsettings/reverbroomid') !== -1) {
-			self.DATA.matrixSettings.reverbRoomId = value
-
-			//find it in choices_reverb_rooms
-			let valueFriendly = ''
-			let reverbRoomObj = self.CHOICES_REVERB_ROOMS.find((item) => item.id === value)
-			if (reverbRoomObj) {
-				valueFriendly = valueFriendly.label
-			}
-			variableObj = { matrixsettings_reverb_room_id: valueFriendly }
-		} else if (address.indexOf('/matrixsettings/reverbpredelayfactor') !== -1) {
-			self.DATA.matrixSettings.reverbPreDelayFactor = value
-			variableObj = { matrixsettings_reverb_pre_delay_factor: value }
-		} else if (address.indexOf('/matrixsettings/reverbrearlevel') !== -1) {
-			self.DATA.matrixSettings.reverbRearLevel = value
-			variableObj = { matrixsettings_reverb_rear_level: value }
-		} else if (address.indexOf('/matrixinput/reverbsendgain/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.matrixInput[id].reverbSendGain = value
-			variableObj = { [`matrixinput${id}_reverb_send_gain`]: value }
-		} else if (address.indexOf('/reverbinput/gain/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.reverbInput[id].gain = value
-			variableObj = { [`reverbinput_gain_${id}_zone${id2}`]: value }
-		} else if (address.indexOf('/reverbinputprocessing/mute/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.reverbInputProcessing[id].mute = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`reverbinputprocessing_mute_${id}`]: valueFriendly }
-		} else if (address.indexOf('/reverbinputprocessing/gain/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.reverbInputProcessing[id].gain = value
-			variableObj = { [`reverbinputprocessing_gain_${id}`]: value }
-		} else if (address.indexOf('/reverbinputprocessing/levelmeter/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.reverbInputProcessing[id].levelMeter = value
-			variableObj = { [`reverbinputprocessing_level_meter_${id}`]: value }
-		} else if (address.indexOf('/reverbinputprocessing/eqenable/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.reverbInputProcessing[id].eqEnable = value
-			let valueFriendly = value === 1 ? 'On' : 'Off'
-			variableObj = { [`reverbinputprocessing_eq_enable_${id}`]: valueFriendly }
-		} else if (address.indexOf('/scene/sceneindex') !== -1) {
-			self.DATA.sceneIndex = value
-			variableObj = { scene_index: value }
-		} else if (address.indexOf('/scene/scenename') !== -1) {
-			self.DATA.sceneName = value
-			variableObj = { scene_name: value }
-		} else if (address.indexOf('/scene/scenecomment') !== -1) {
-			self.DATA.sceneComment = value
-			variableObj = { scene_comment: value }
-		} else if (address.indexOf('/soundobjectrouting/mute/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.soundObjectRouting[id][id2].mute = value
-			variableObj = { [`soundobjectrouting_mute_${id}_${id2}`]: value }
-		} else if (address.indexOf('/soundobjectrouting/gain/') !== -1) {
-			let id = address.split('/')[3]
-			let id2 = address.split('/')[4]
-			self.DATA.soundObjectRouting[id][id2].gain = value
-			variableObj = { [`soundobjectrouting_gain_${id}_${id2}`]: value }
-		} else if (address.indexOf('/functiongroup/name/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.functionGroup[id].name = value
-			variableObj = { [`functiongroup_name_${id}`]: value }
-		} else if (address.indexOf('/functiongroup/spreadfactor/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.functionGroup[id].spreadFactor = value
-			variableObj = { [`functiongroup_spread_factor_${id}`]: value }
-		} else if (address.indexOf('/functiongroup/delay/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.functionGroup[id].delay = value
-			variableObj = { [`functiongroup_delay_${id}`]: value }
-		} else if (address.indexOf('/positioning/speaker_position/') !== -1) {
-			let id = address.split('/')[3]
-
-			const arg1 = oscMsg['args'][0]
-			const arg2 = oscMsg['args'][1]
-			const arg3 = oscMsg['args'][2]
-			const arg4 = oscMsg['args'][3]
-			const arg5 = oscMsg['args'][4]
-
-			const value1 = arg1['value']
-			const value2 = arg2['value']
-			const value3 = arg3['value']
-			const value4 = arg4['value']
-			const value5 = arg5['value']
-
-			self.DATA.positioning.speakerPosition[id].x = value1
-			self.DATA.positioning.speakerPosition[id].y = value2
-			self.DATA.positioning.speakerPosition[id].z = value3
-			self.DATA.positioning.speakerPosition[id].h = value4
-			self.DATA.positioning.speakerPosition[id].v = value5
-
-			variableObj = {
-				[`speakerposition_x_${id}`]: value1,
-				[`speakerposition_y_${id}`]: value2,
-				[`speakerposition_z_${id}`]: value3,
-				[`speakerposition_h_${id}`]: value4,
-				[`speakerposition_v_${id}`]: value5,
-			}
-		} else if (address.indexOf('/coordinatemappingsettings/p1_real/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p1Real[id] = value
-			variableObj = { [`coordinatemappingsettings_p1_real_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/p2_real/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p2Real[id] = value
-			variableObj = { [`coordinatemappingsettings_p2_real_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/p3_real/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p3Real[id] = value
-			variableObj = { [`coordinatemappingsettings_p3_real_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/p4_real/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p4Real[id] = value
-			variableObj = { [`coordinatemappingsettings_p4_real_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/p1_virtual/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p1Virtual[id] = value
-			variableObj = { [`coordinatemappingsettings_p1_virtual_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/p3_virtual/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.p3Virtual[id] = value
-			variableObj = { [`coordinatemappingsettings_p3_virtual_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/flip/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.flip[id] = value
-			variableObj = { [`coordinatemappingsettings_flip_${id}`]: value }
-		} else if (address.indexOf('/coordinatemappingsettings/name/') !== -1) {
-			let id = address.split('/')[3]
-			self.DATA.coordinateMappingSettings.name[id] = value
-			variableObj = { [`coordinatemappingsettings_name_${id}`]: value }
+			self.setVariableValues(variableObj)
 		}
-
-		self.setVariableValues(variableObj)
+		catch(e) {
+			self.log('error', `Error: ${e.message}`)
+		}
 	},
 }
