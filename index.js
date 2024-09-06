@@ -31,7 +31,7 @@ class dbaudiotechnikDspInstance extends InstanceBase {
 			...constants,
 		})
 
-		this.PREFIX = '/dbaudio1'
+		this.instanceOptions.disableVariableValidation = true //reduce the number of visible variables
 	}
 
 	async init(config) {

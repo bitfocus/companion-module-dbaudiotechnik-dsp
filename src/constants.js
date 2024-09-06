@@ -14,4 +14,14 @@ module.exports = {
 		{ id: 102, label: 'Custom room 2' },
 		{ id: 103, label: 'Custom room 3' },
 	],
+
+	PREFIX: '/dbaudio1',
+	DATA: {
+		matrixInput: {},
+		matrixNode: {},
+		matrixOutput: {},
+		positioning: {},
+		coordinateMapping: {},
+		sounbObjectRouting: {},
+	},
 }
