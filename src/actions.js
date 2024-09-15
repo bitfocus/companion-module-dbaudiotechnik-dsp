@@ -70,6 +70,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputMuteAll = {
+			name: 'Matrix Input - Mute All',
+			description: 'Mute or Unmute all Matrix Inputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Mute',
+					id: 'mute',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Mute' },
+						{ id: 0, label: 'Unmute' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let mute = options.mute
+
+				let args = [
+					{
+						type: 'i',
+						value: mute,
+					},
+				]
+
+				self.sendCommand('/matrixinput/mute/' + '*', args)
+			},
+		}
+
 		actions.setMatrixInputGain = {
 			name: 'Matrix Input - Gain',
 			description: 'Set the Gain of a Matrix Input',
@@ -109,6 +139,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputGainAll = {
+			name: 'Matrix Input - Gain All',
+			description: 'Set the Gain of all Matrix Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Gain',
+					id: 'gain',
+					default: 0,
+					min: -120.0,
+					max: 24.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let gain = options.gain
+
+				let args = [
+					{
+						type: 'f',
+						value: gain,
+					},
+				]
+
+				self.sendCommand('/matrixinput/gain/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixInputGain = {
 			name: 'Matrix Input - Increase Gain',
 			description: 'Increase the Gain of a Matrix Input',
@@ -136,8 +195,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixInput[matrixInput].gain
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
 
@@ -187,8 +244,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixInput[matrixInput].gain
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
 
@@ -250,6 +305,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputDelayAll = {
+			name: 'Matrix Input - Delay All',
+			description: 'Set the Delay of all Matrix Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Delay (ms)',
+					id: 'delay',
+					default: 0,
+					min: 0.0,
+					max: 500.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delay = options.delay
+
+				let args = [
+					{
+						type: 'f',
+						value: delay,
+					},
+				]
+
+				self.sendCommand('/matrixinput/delay/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixInputDelay = {
 			name: 'Matrix Input - Increase Delay',
 			description: 'Increase the Delay of a Matrix Input',
@@ -277,8 +361,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixInput[matrixInput].delay
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
 
@@ -328,8 +410,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixInput[matrixInput].delay
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
 
@@ -392,6 +472,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputDelayEnableAll = {
+			name: 'Matrix Input - Delay Enable All',
+			description: 'Enable or Disable Delay of all Matrix Inputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Delay Enable',
+					id: 'delayenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delayEnable = options.delayenable
+
+				let args = [
+					{
+						type: 'i',
+						value: delayEnable,
+					},
+				]
+
+				self.sendCommand('/matrixinput/delayenable/' + '*', args)
+			},
+		}
+
 		actions.setMatrixInputEqEnable = {
 			name: 'Matrix Input - EQ Enable',
 			description: 'Enable or Disable EQ of a Matrix Input',
@@ -432,6 +542,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputEqEnableAll = {
+			name: 'Matrix Input - EQ Enable All',
+			description: 'Enable or Disable EQ of all Matrix Inputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'EQ Enable',
+					id: 'eqenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let eqEnable = options.eqenable
+
+				let args = [
+					{
+						type: 'i',
+						value: eqEnable,
+					},
+				]
+
+				self.sendCommand('/matrixinput/eqenable/' + '*', args)
+			},
+		}
+
 		actions.setMatrixInputPolarity = {
 			name: 'Matrix Input - Polarity',
 			description: 'Set the Polarity of a Matrix Input',
@@ -469,6 +609,36 @@ module.exports = {
 				]
 
 				self.sendCommand('/matrixinput/polarity/' + matrixInput, args)
+			},
+		}
+
+		actions.setMatrixInputPolarityAll = {
+			name: 'Matrix Input - Polarity All',
+			description: 'Set the Polarity of all Matrix Inputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Polarity',
+					id: 'polarity',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Reversed' },
+						{ id: 0, label: 'Normal' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let polarity = options.polarity
+
+				let args = [
+					{
+						type: 'i',
+						value: polarity,
+					},
+				]
+
+				self.sendCommand('/matrixinput/polarity/' + '*', args)
 			},
 		}
 
@@ -548,6 +718,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputLevelMeterPreMuteAll = {
+			name: 'Matrix Input - Level Meter Pre Mute All',
+			description: 'Set the Level Meter Pre Mute of all Matrix Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Level Meter Pre Mute',
+					id: 'levelmeterpremute',
+					default: 0,
+					min: -120.0,
+					max: 0.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let levelMeterPreMute = options.levelmeterpremute
+
+				let args = [
+					{
+						type: 'f',
+						value: levelMeterPreMute,
+					},
+				]
+
+				self.sendCommand('/matrixinput/levelmeterpremute/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixInputLevelMeterPreMute = {
 			name: 'Matrix Input - Increase Level Meter Pre Mute',
 			description: 'Increase the Level Meter Pre Mute of a Matrix Input',
@@ -575,8 +774,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeterPreMute = options.levelmeterpremute
-
-				//calculate new levelMeterPreMute based on self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
@@ -626,8 +823,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeterPreMute = options.levelmeterpremute
-
-				//calculate new levelMeterPreMute based on self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
@@ -689,6 +884,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputLevelMeterPostMuteAll = {
+			name: 'Matrix Input - Level Meter Post Mute All',
+			description: 'Set the Level Meter Post Mute of all Matrix Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Level Meter Post Mute',
+					id: 'levelmeterpostmute',
+					default: 0,
+					min: -120.0,
+					max: 0.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let levelMeterPostMute = options.levelmeterpostmute
+
+				let args = [
+					{
+						type: 'f',
+						value: levelMeterPostMute,
+					},
+				]
+
+				self.sendCommand('/matrixinput/levelmeterpostmute/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixInputLevelMeterPostMute = {
 			name: 'Matrix Input - Increase Level Meter Post Mute',
 			description: 'Increase the Level Meter Post Mute of a Matrix Input',
@@ -716,8 +940,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeterPostMute = options.levelmeterpostmute
-
-				//calculate new levelMeterPostMute based on self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
@@ -767,8 +989,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeterPostMute = options.levelmeterpostmute
-
-				//calculate new levelMeterPostMute based on self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
@@ -888,6 +1108,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixNodeGainAll = {
+			name: 'Matrix Node - Gain All',
+			description: 'Set the Gain of all Matrix Nodes',
+			options: [
+				{
+					type: 'number',
+					label: 'Gain',
+					id: 'gain',
+					default: 0,
+					min: -120.0,
+					max: 10.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let gain = options.gain
+
+				let args = [
+					{
+						type: 'f',
+						value: gain,
+					},
+				]
+
+				self.sendCommand('/matrixnode/gain/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixNodeGain = {
 			name: 'Matrix Node - Increase Gain',
 			description: 'Increase the Gain of a Matrix Node',
@@ -924,8 +1173,6 @@ module.exports = {
 				let options = action.options
 				let matrixNode = options.input + '/' + options.output
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixNode[matrixNode].gain
 
 				let currentGain = self.DATA?.matrixNode[matrixNode].gain
 
@@ -984,8 +1231,6 @@ module.exports = {
 				let options = action.options
 				let matrixNode = options.input + '/' + options.output
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixNode[matrixNode].gain
 
 				let currentGain = self.DATA?.matrixNode[matrixNode].gain
 
@@ -1057,6 +1302,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixNodeDelayEnableAll = {
+			name: 'Matrix Node - Delay Enable All',
+			description: 'Enable or Disable Delay of all Matrix Nodes',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Delay Enable',
+					id: 'delayenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delayEnable = options.delayenable
+
+				let args = [
+					{
+						type: 'i',
+						value: delayEnable,
+					},
+				]
+
+				self.sendCommand('/matrixnode/delayenable/' + '*' + '/' + '*', args)
+			},
+		}
+
 		actions.setMatrixNodeDelay = {
 			name: 'Matrix Node - Delay',
 			description: 'Set the Delay of a Matrix Node',
@@ -1105,6 +1380,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixNodeDelayAll = {
+			name: 'Matrix Node - Delay All',
+			description: 'Set the Delay of all Matrix Nodes',
+			options: [
+				{
+					type: 'number',
+					label: 'Delay (ms)',
+					id: 'delay',
+					default: 0,
+					min: 0.0,
+					max: 500.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delay = options.delay
+
+				let args = [
+					{
+						type: 'f',
+						value: delay,
+					},
+				]
+
+				self.sendCommand('/matrixnode/delay/' + '*' + '/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixNodeDelay = {
 			name: 'Matrix Node - Increase Delay',
 			description: 'Increase the Delay of a Matrix Node',
@@ -1141,8 +1445,6 @@ module.exports = {
 				let options = action.options
 				let matrixNode = options.input + '/' + options.output
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixNode[matrixNode].delay
 
 				let currentDelay = self.DATA?.matrixNode[matrixNode].delay
 
@@ -1201,8 +1503,6 @@ module.exports = {
 				let options = action.options
 				let matrixNode = options.input + '/' + options.output
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixNode[matrixNode].delay
 
 				let currentDelay = self.DATA?.matrixNode[matrixNode].delay
 
@@ -1265,6 +1565,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputMuteAll = {
+			name: 'Matrix Output - Mute All',
+			description: 'Mute or Unmute all Matrix Outputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Mute',
+					id: 'mute',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Mute' },
+						{ id: 0, label: 'Unmute' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let mute = options.mute
+
+				let args = [
+					{
+						type: 'i',
+						value: mute,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/mute/' + '*', args)
+			},
+		}
+
 		actions.setMatrixOutputGain = {
 			name: 'Matrix Output - Gain',
 			description: 'Set the Gain of a Matrix Output',
@@ -1304,6 +1634,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputGainAll = {
+			name: 'Matrix Output - Gain All',
+			description: 'Set the Gain of all Matrix Outputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Gain',
+					id: 'gain',
+					default: 0,
+					min: -120.0,
+					max: 24.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let gain = options.gain
+
+				let args = [
+					{
+						type: 'f',
+						value: gain,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/gain/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixOutputGain = {
 			name: 'Matrix Output - Increase Gain',
 			description: 'Increase the Gain of a Matrix Output',
@@ -1331,8 +1690,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixOutput[matrixOutput].gain
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
 
@@ -1382,8 +1739,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.matrixOutput[matrixOutput].gain
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
 
@@ -1445,6 +1800,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputDelayAll = {
+			name: 'Matrix Output - Delay All',
+			description: 'Set the Delay of all Matrix Outputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Delay (ms)',
+					id: 'delay',
+					default: 0,
+					min: 0.0,
+					max: 500.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delay = options.delay
+
+				let args = [
+					{
+						type: 'f',
+						value: delay,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/delay/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixOutputDelay = {
 			name: 'Matrix Output - Increase Delay',
 			description: 'Increase the Delay of a Matrix Output',
@@ -1472,8 +1856,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixOutput[matrixOutput].delay
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
 
@@ -1523,8 +1905,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.matrixOutput[matrixOutput].delay
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
 
@@ -1587,6 +1967,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputDelayEnableAll = {
+			name: 'Matrix Output - Delay Enable All',
+			description: 'Enable or Disable Delay of all Matrix Outputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Delay Enable',
+					id: 'delayenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let delayEnable = options.delayenable
+
+				let args = [
+					{
+						type: 'i',
+						value: delayEnable,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/delayenable/' + '*', args)
+			},
+		}
+
 		actions.setMatrixOutputEqEnable = {
 			name: 'Matrix Output - EQ Enable',
 			description: 'Enable or Disable EQ of a Matrix Output',
@@ -1627,6 +2037,36 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputEqEnableAll = {
+			name: 'Matrix Output - EQ Enable All',
+			description: 'Enable or Disable EQ of all Matrix Outputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'EQ Enable',
+					id: 'eqenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let eqEnable = options.eqenable
+
+				let args = [
+					{
+						type: 'i',
+						value: eqEnable,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/eqenable/' + '*', args)
+			},
+		}
+
 		actions.setMatrixOutputPolarity = {
 			name: 'Matrix Output - Polarity',
 			description: 'Set the Polarity of a Matrix Output',
@@ -1664,6 +2104,36 @@ module.exports = {
 				]
 
 				self.sendCommand('/matrixoutput/polarity/' + matrixOutput, args)
+			},
+		}
+
+		actions.setMatrixOutputPolarityAll = {
+			name: 'Matrix Output - Polarity All',
+			description: 'Set the Polarity of all Matrix Outputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Polarity',
+					id: 'polarity',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Reversed' },
+						{ id: 0, label: 'Normal' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let polarity = options.polarity
+
+				let args = [
+					{
+						type: 'i',
+						value: polarity,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/polarity/' + '*', args)
 			},
 		}
 
@@ -1743,6 +2213,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputLevelMeterPreMuteAll = {
+			name: 'Matrix Output - Level Meter Pre Mute All',
+			description: 'Set the Level Meter Pre Mute of all Matrix Outputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Level Meter Pre Mute',
+					id: 'levelmeterpremute',
+					default: 0,
+					min: -120.0,
+					max: 0.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let levelMeterPreMute = options.levelmeterpremute
+
+				let args = [
+					{
+						type: 'f',
+						value: levelMeterPreMute,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/levelmeterpremute/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixOutputLevelMeterPreMute = {
 			name: 'Matrix Output - Increase Level Meter Pre Mute',
 			description: 'Increase the Level Meter Pre Mute of a Matrix Output',
@@ -1770,8 +2269,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let levelMeterPreMute = options.levelmeterpremute
-
-				//calculate new levelMeterPreMute based on self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
@@ -1821,8 +2318,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let levelMeterPreMute = options.levelmeterpremute
-
-				//calculate new levelMeterPreMute based on self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
@@ -1884,6 +2379,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixOutputLevelMeterPostMuteAll = {
+			name: 'Matrix Output - Level Meter Post Mute All',
+			description: 'Set the Level Meter Post Mute of all Matrix Outputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Level Meter Post Mute',
+					id: 'levelmeterpostmute',
+					default: 0,
+					min: -120.0,
+					max: 0.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let levelMeterPostMute = options.levelmeterpostmute
+
+				let args = [
+					{
+						type: 'f',
+						value: levelMeterPostMute,
+					},
+				]
+
+				self.sendCommand('/matrixoutput/levelmeterpostmute/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixOutputLevelMeterPostMute = {
 			name: 'Matrix Output - Increase Level Meter Post Mute',
 			description: 'Increase the Level Meter Post Mute of a Matrix Output',
@@ -1911,8 +2435,6 @@ module.exports = {
 				let options = action.options
 				let matrixOutput = options.matrixoutput
 				let levelMeterPostMute = options.levelmeterpostmute
-
-				//calculate new levelMeterPostMute based on self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
 
@@ -2002,8 +2524,6 @@ module.exports = {
 				let soundObject = options.soundobject
 				let sourceSpread = options.sourcespread
 
-				//calculate new sourceSpread based on self.DATA?.soundObject[soundObject].sourceSpread
-
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
 
 				if (currentSourceSpread) {
@@ -2052,8 +2572,6 @@ module.exports = {
 				let options = action.options
 				let soundObject = options.soundobject
 				let sourceSpread = options.sourcespread
-
-				//calculate new sourceSpread based on self.DATA?.soundObject[soundObject].sourceSpread
 
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
 
@@ -2285,8 +2803,6 @@ module.exports = {
 				let soundObject = options.soundobject
 				let sourcePositionX = options.sourceposition
 
-				//calculate new sourcePositionX based on self.DATA?.soundObject[soundObject].sourcePositionX
-
 				let currentSourcePositionX = self.DATA?.positioning.sourcePositionX
 
 				if (currentSourcePositionX) {
@@ -2330,8 +2846,6 @@ module.exports = {
 				let options = action.options
 				let soundObject = options.soundobject
 				let sourcePositionX = options.sourceposition
-
-				//calculate new sourcePositionX based on self.DATA?.soundObject[soundObject].sourcePositionX
 
 				let currentSourcePositionX = self.DATA?.positioning.sourcePositionX
 
@@ -2413,8 +2927,6 @@ module.exports = {
 				let soundObject = options.soundobject
 				let sourcePositionY = options.sourceposition
 
-				//calculate new sourcePositionY based on self.DATA?.soundObject[soundObject].sourcePositionY
-
 				let currentSourcePositionY = self.DATA?.positioning.sourcePositionY
 
 				if (currentSourcePositionY) {
@@ -2458,8 +2970,6 @@ module.exports = {
 				let options = action.options
 				let soundObject = options.soundobject
 				let sourcePositionY = options.sourceposition
-
-				//calculate new sourcePositionY based on self.DATA?.soundObject[soundObject].sourcePositionY
 
 				let currentSourcePositionY = self.DATA?.positioning.sourcePositionY
 
@@ -2695,8 +3205,6 @@ module.exports = {
 				let soundObject = options.soundobject
 				let sourcePositionX = options.sourceposition
 
-				//calculate new sourcePositionX based on self.DATA?.soundObject[soundObject].sourcePositionX
-
 				let currentSourcePositionX =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionX
 
@@ -2754,8 +3262,6 @@ module.exports = {
 				let coordinateMappingArea = options.coordinatemappingarea
 				let soundObject = options.soundobject
 				let sourcePositionX = options.sourceposition
-
-				//calculate new sourcePositionX based on self.DATA?.soundObject[soundObject].sourcePositionX
 
 				let currentSourcePositionX =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionX
@@ -2863,8 +3369,6 @@ module.exports = {
 				let coordinateMappingArea = options.coordinatemappingarea
 				let soundObject = options.soundobject
 
-				//calculate new sourcePositionY based on self.DATA?.soundObject[soundObject].sourcePositionY
-
 				let currentSourcePositionY =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionY
 
@@ -2922,8 +3426,6 @@ module.exports = {
 				let coordinateMappingArea = options.coordinatemappingarea
 				let soundObject = options.soundobject
 				let sourcePositionY = options.sourceposition
-
-				//calculate new sourcePositionY based on self.DATA?.soundObject[soundObject].sourcePositionY
 
 				let currentSourcePositionY =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionY
@@ -3019,8 +3521,6 @@ module.exports = {
 				let options = action.options
 				let reverbPreDelayFactor = options.reverbpredelayfactor
 
-				//calculate new reverbPreDelayFactor based on self.DATA?.matrixSettings.reverbPreDelayFactor
-
 				let currentReverbPreDelayFactor = self.DATA?.matrixSettings.reverbPreDelayFactor
 
 				if (currentReverbPreDelayFactor) {
@@ -3058,8 +3558,6 @@ module.exports = {
 			callback: async function (action) {
 				let options = action.options
 				let reverbPreDelayFactor = options.reverbpredelayfactor
-
-				//calculate new reverbPreDelayFactor based on self.DATA?.matrixSettings.reverbPreDelayFactor
 
 				let currentReverbPreDelayFactor = self.DATA?.matrixSettings.reverbPreDelayFactor
 
@@ -3128,8 +3626,6 @@ module.exports = {
 				let options = action.options
 				let reverbRearLevel = options.reverbrearlevel
 
-				//calculate new reverbRearLevel based on self.DATA?.matrixSettings.reverbRearLevel
-
 				let currentReverbRearLevel = self.DATA?.matrixSettings.reverbRearLevel
 
 				if (currentReverbRearLevel) {
@@ -3167,8 +3663,6 @@ module.exports = {
 			callback: async function (action) {
 				let options = action.options
 				let reverbRearLevel = options.reverbrearlevel
-
-				//calculate new reverbRearLevel based on self.DATA?.matrixSettings.reverbRearLevel
 
 				let currentReverbRearLevel = self.DATA?.matrixSettings.reverbRearLevel
 
@@ -3230,6 +3724,35 @@ module.exports = {
 			},
 		}
 
+		actions.setMatrixInputReverbSendGainAll = {
+			name: 'Matrix Input - Reverb Send Gain (All)',
+			description: 'Set the Reverb Send Gain of all Matrix Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Reverb Send Gain',
+					id: 'reverbsendgain',
+					default: 0,
+					min: -120.0,
+					max: 24.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let reverbSendGain = options.reverbsendgain
+
+				let args = [
+					{
+						type: 'f',
+						value: reverbSendGain,
+					},
+				]
+
+				self.sendCommand('/matrixinput/reverbsendgain/' + '*', args)
+			},
+		}
+
 		actions.increaseMatrixInputReverbSendGain = {
 			name: 'Matrix Input - Increase Reverb Send Gain',
 			description: 'Increase the Reverb Send Gain of a Matrix Input',
@@ -3256,8 +3779,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let reverbSendGain = options.reverbsendgain
-
-				//calculate new reverbSendGain based on self.DATA?.matrixInput[matrixInput].reverbSendGain
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
 
@@ -3302,8 +3823,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let reverbSendGain = options.reverbsendgain
-
-				//calculate new reverbSendGain based on self.DATA?.matrixInput[matrixInput].reverbSendGain
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
 
@@ -3361,6 +3880,35 @@ module.exports = {
 			},
 		}
 
+		actions.setReverbInputGainAll = {
+			name: 'Reverb Input - Gain (All)',
+			description: 'Set the Gain of all Reverb Inputs',
+			options: [
+				{
+					type: 'number',
+					label: 'Gain',
+					id: 'gain',
+					default: 0,
+					min: -120.0,
+					max: 24.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let gain = options.gain
+
+				let args = [
+					{
+						type: 'f',
+						value: gain,
+					},
+				]
+
+				self.sendCommand('/reverbinput/gain/' + '*', args)
+			},
+		}
+
 		actions.increaseReverbInputGain = {
 			name: 'Reverb Input - Increase Gain',
 			description: 'Increase the Gain of a Reverb Input',
@@ -3387,8 +3935,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.reverbInput[matrixInput].gain
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
 
@@ -3433,8 +3979,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.reverbInput[matrixInput].gain
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
 
@@ -3493,6 +4037,36 @@ module.exports = {
 			},
 		}
 
+		actions.setReverbInputProcessingMuteAll = {
+			name: 'Reverb Input Processing - Mute (All)',
+			description: 'Mute or Unmute the Processing of all Reverb Inputs',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Mute',
+					id: 'mute',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Mute' },
+						{ id: 0, label: 'Unmute' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let mute = options.mute
+
+				let args = [
+					{
+						type: 'i',
+						value: mute,
+					},
+				]
+
+				self.sendCommand('/reverbinputprocessing/mute/' + '*', args)
+			},
+		}
+
 		actions.setReverbInputProcessingGain = {
 			name: 'Reverb Input Processing - Gain',
 			description: 'Set the Gain of a Reverb Input Processing',
@@ -3532,6 +4106,35 @@ module.exports = {
 			},
 		}
 
+		actions.setReverbInputProcessingGainAll = {
+			name: 'Reverb Input Processing - Gain (All)',
+			description: 'Set the Gain of all Reverb Input Processings',
+			options: [
+				{
+					type: 'number',
+					label: 'Gain',
+					id: 'gain',
+					default: 0,
+					min: -120.0,
+					max: 24.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let gain = options.gain
+
+				let args = [
+					{
+						type: 'f',
+						value: gain,
+					},
+				]
+
+				self.sendCommand('/reverbinputprocessing/gain/' + '*', args)
+			},
+		}
+
 		actions.increaseReverbInputProcessingGain = {
 			name: 'Reverb Input Processing - Increase Gain',
 			description: 'Increase the Gain of a Reverb Input Processing',
@@ -3558,8 +4161,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.reverbInputProcessing[matrixInput].gain
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
 
@@ -3604,8 +4205,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.reverbInputProcessing[matrixInput].gain
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
 
@@ -3663,6 +4262,35 @@ module.exports = {
 			},
 		}
 
+		actions.setReverbInputProcessingLevelMeterAll = {
+			name: 'Reverb Input Processing - Level Meter (All)',
+			description: 'Set the Level Meter of all Reverb Input Processings',
+			options: [
+				{
+					type: 'number',
+					label: 'Level Meter',
+					id: 'levelmeter',
+					default: 0,
+					min: -120.0,
+					max: 0.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let levelMeter = options.levelmeter
+
+				let args = [
+					{
+						type: 'f',
+						value: levelMeter,
+					},
+				]
+
+				self.sendCommand('/reverbinputprocessing/levelmeter/' + '*', args)
+			},
+		}
+
 		actions.increaseReverbInputProcessingLevelMeter = {
 			name: 'Reverb Input Processing - Increase Level Meter',
 			description: 'Increase the Level Meter of a Reverb Input Processing',
@@ -3689,8 +4317,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeter = options.levelmeter
-
-				//calculate new levelMeter based on self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
@@ -3735,8 +4361,6 @@ module.exports = {
 				let options = action.options
 				let matrixInput = options.matrixinput
 				let levelMeter = options.levelmeter
-
-				//calculate new levelMeter based on self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
@@ -3792,6 +4416,36 @@ module.exports = {
 				]
 
 				self.sendCommand('/reverbinputprocessing/eqenable/' + matrixInput, args)
+			},
+		}
+
+		actions.setReverbInputProcessingEqEnableAll = {
+			name: 'Reverb Input Processing - EQ Enable (All)',
+			description: 'Enable or Disable EQ of all Reverb Input Processings',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'EQ Enable',
+					id: 'eqenable',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Enable' },
+						{ id: 0, label: 'Disable' },
+					],
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let eqEnable = options.eqenable
+
+				let args = [
+					{
+						type: 'i',
+						value: eqEnable,
+					},
+				]
+
+				self.sendCommand('/reverbinputprocessing/eqenable/' + '*', args)
 			},
 		}
 
@@ -4027,8 +4681,6 @@ module.exports = {
 				let soundObject = options.soundobject
 				let gain = options.gain
 
-				//calculate new gain based on self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
-
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
 
 				if (currentGain) {
@@ -4082,8 +4734,6 @@ module.exports = {
 				let functionGroup = options.functiongroup
 				let soundObject = options.soundobject
 				let gain = options.gain
-
-				//calculate new gain based on self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
 
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
 
@@ -4168,8 +4818,6 @@ module.exports = {
 				let functionGroup = options.functiongroup
 				let spreadFactor = options.spreadfactor
 
-				//calculate new spreadFactor based on self.DATA?.functionGroup[functionGroup].spreadFactor
-
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
 
 				if (currentSpreadFactor) {
@@ -4217,8 +4865,6 @@ module.exports = {
 				let options = action.options
 				let functionGroup = options.functiongroup
 				let spreadFactor = options.spreadfactor
-
-				//calculate new spreadFactor based on self.DATA?.functionGroup[functionGroup].spreadFactor
 
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
 
@@ -4307,8 +4953,6 @@ module.exports = {
 				let functionGroup = options.functiongroup
 				let delay = options.delay
 
-				//calculate new delay based on self.DATA?.functionGroup[functionGroup].delay
-
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
 
 				if (currentDelay) {
@@ -4356,8 +5000,6 @@ module.exports = {
 				let options = action.options
 				let functionGroup = options.functiongroup
 				let delay = options.delay
-
-				//calculate new delay based on self.DATA?.functionGroup[functionGroup].delay
 
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
 
