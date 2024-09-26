@@ -11,7 +11,7 @@ module.exports = {
 			name: 'Status - Audio Network Sample Status',
 		})
 
-		/*for (let i = 1; i <= 64; i++) {
+		for (let i = 1; i <= 64; i++) {
 			variables.push({ variableId: `matrixinput${i}_mute`, name: `Matrix Input ${i} - Mute` })
 			variables.push({ variableId: `matrixinput${i}_gain`, name: `Matrix Input ${i} - Gain` })
 			variables.push({ variableId: `matrixinput${i}_delay`, name: `Matrix Input ${i} - Delay` })
@@ -57,7 +57,7 @@ module.exports = {
 				variableId: `matrixoutput${i}_level_meter_post_mute`,
 				name: `Matrix Output ${i} - Level Meter Post Mute`,
 			})
-		}*/
+		}
 
 		/*for (let i = 1; i <= 64; i++) {
 			variables.push({ variableId: `positioning_${i}_source_spread`, name: `Positioning ${i} - Source Spread` })

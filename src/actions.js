@@ -193,7 +193,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
@@ -242,7 +242,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
@@ -359,7 +359,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
@@ -408,7 +408,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
@@ -772,7 +772,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeterPreMute = options.levelmeterpremute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
@@ -821,7 +821,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeterPreMute = options.levelmeterpremute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
@@ -938,7 +938,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeterPostMute = options.levelmeterpostmute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
@@ -987,7 +987,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeterPostMute = options.levelmeterpostmute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
@@ -1171,10 +1171,12 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
+				let input = options.input.toString()
+				let output = options.output.toString()
 				let matrixNode = options.input + '/' + options.output
 				let gain = options.gain
 
-				let currentGain = self.DATA?.matrixNode[matrixNode].gain
+				let currentGain = self.DATA?.matrixNode[input][output].gain
 
 				if (currentGain) {
 					let newGain = currentGain + gain
@@ -1229,10 +1231,12 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
+				let input = options.input.toString()
+				let output = options.output.toString()
 				let matrixNode = options.input + '/' + options.output
 				let gain = options.gain
 
-				let currentGain = self.DATA?.matrixNode[matrixNode].gain
+				let currentGain = self.DATA?.matrixNode[input][output].gain
 
 				if (currentGain) {
 					let newGain = currentGain - gain
@@ -1443,10 +1447,12 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
+				let input = options.input.toString()
+				let output = options.output.toString()
 				let matrixNode = options.input + '/' + options.output
 				let delay = options.delay
 
-				let currentDelay = self.DATA?.matrixNode[matrixNode].delay
+				let currentDelay = self.DATA?.matrixNode[input][output].delay
 
 				if (currentDelay) {
 					let newDelay = currentDelay + delay
@@ -1501,10 +1507,12 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
+				let input = options.input.toString()
+				let output = options.output.toString()
 				let matrixNode = options.input + '/' + options.output
 				let delay = options.delay
 
-				let currentDelay = self.DATA?.matrixNode[matrixNode].delay
+				let currentDelay = self.DATA?.matrixNode[input][output].delay
 
 				if (currentDelay) {
 					let newDelay = currentDelay - delay
@@ -1688,7 +1696,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
@@ -1737,7 +1745,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
@@ -1854,7 +1862,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
@@ -1903,7 +1911,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
@@ -2267,7 +2275,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let levelMeterPreMute = options.levelmeterpremute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
@@ -2316,7 +2324,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let levelMeterPreMute = options.levelmeterpremute
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
@@ -2433,7 +2441,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixOutput = options.matrixoutput
+				let matrixOutput = options.matrixoutput.toString()
 				let levelMeterPostMute = options.levelmeterpostmute
 
 				let currentLevelMeterPostMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
@@ -2443,6 +2451,55 @@ module.exports = {
 
 					if (levelMeterPostMute > 0.0) {
 						levelMeterPostMute = 0.0
+					}
+
+					let args = [
+						{
+							type: 'f',
+							value: newLevelMeterPostMute,
+						},
+					]
+
+					self.sendCommand('/matrixoutput/levelmeterpostmute/' + matrixOutput, args)
+				}
+			},
+		}
+
+		actions.decreaseMatrixOutputLevelMeterPostMute = {
+			name: 'Matrix Output - Decrease Level Meter Post Mute',
+			description: 'Decrease the Level Meter Post Mute of a Matrix Output',
+			options: [
+				{
+					type: 'number',
+					label: 'Matrix Output',
+					id: 'matrixoutput',
+					default: 1,
+					min: 1,
+					max: 64,
+					required: true,
+				},
+				{
+					type: 'number',
+					label: 'Level Meter Post Mute Decrease Amount',
+					id: 'levelmeterpostmute',
+					default: 1,
+					min: 0.1,
+					max: 6.0,
+					required: true,
+				},
+			],
+			callback: async function (action) {
+				let options = action.options
+				let matrixOutput = options.matrixoutput.toString()
+				let levelMeterPostMute = options.levelmeterpostmute
+
+				let currentLevelMeterPostMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
+
+				if (currentLevelMeterPostMute) {
+					let newLevelMeterPostMute = currentLevelMeterPostMute - levelMeterPostMute
+
+					if (levelMeterPostMute < -120.0) {
+						levelMeterPostMute = -120.0
 					}
 
 					let args = [
@@ -2521,7 +2578,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourceSpread = options.sourcespread
 
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
@@ -2570,7 +2627,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourceSpread = options.sourcespread
 
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
@@ -2800,10 +2857,10 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourcePositionX = options.sourceposition
 
-				let currentSourcePositionX = self.DATA?.positioning.sourcePositionX
+				let currentSourcePositionX = self.DATA?.positioning[id].sourcePositionX
 
 				if (currentSourcePositionX) {
 					let newSourcePositionX = currentSourcePositionX + sourcePositionX
@@ -2844,10 +2901,10 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourcePositionX = options.sourceposition
 
-				let currentSourcePositionX = self.DATA?.positioning.sourcePositionX
+				let currentSourcePositionX = self.DATA?.positioning[id].sourcePositionX
 
 				if (currentSourcePositionX) {
 					let newSourcePositionX = currentSourcePositionX - sourcePositionX
@@ -2924,10 +2981,10 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourcePositionY = options.sourceposition
 
-				let currentSourcePositionY = self.DATA?.positioning.sourcePositionY
+				let currentSourcePositionY = self.DATA?.positioning[id].sourcePositionY
 
 				if (currentSourcePositionY) {
 					let newSourcePositionY = currentSourcePositionY + sourcePositionY
@@ -2968,10 +3025,10 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let soundObject = options.soundobject
+				let soundObject = options.soundobject.toString()
 				let sourcePositionY = options.sourceposition
 
-				let currentSourcePositionY = self.DATA?.positioning.sourcePositionY
+				let currentSourcePositionY = self.DATA?.positioning[id].sourcePositionY
 
 				if (currentSourcePositionY) {
 					let newSourcePositionY = currentSourcePositionY - sourcePositionY
@@ -3201,8 +3258,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let coordinateMappingArea = options.coordinatemappingarea
-				let soundObject = options.soundobject
+				let coordinateMappingArea = options.coordinatemappingarea.toString()
+				let soundObject = options.soundobject.toString()
 				let sourcePositionX = options.sourceposition
 
 				let currentSourcePositionX =
@@ -3259,8 +3316,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let coordinateMappingArea = options.coordinatemappingarea
-				let soundObject = options.soundobject
+				let coordinateMappingArea = options.coordinatemappingarea.toString()
+				let soundObject = options.soundobject.toString()
 				let sourcePositionX = options.sourceposition
 
 				let currentSourcePositionX =
@@ -3366,8 +3423,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let coordinateMappingArea = options.coordinatemappingarea
-				let soundObject = options.soundobject
+				let coordinateMappingArea = options.coordinatemappingarea.toString()
+				let soundObject = options.soundobject.toString()
 
 				let currentSourcePositionY =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionY
@@ -3423,8 +3480,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let coordinateMappingArea = options.coordinatemappingarea
-				let soundObject = options.soundobject
+				let coordinateMappingArea = options.coordinatemappingarea.toString()
+				let soundObject = options.soundobject.toString()
 				let sourcePositionY = options.sourceposition
 
 				let currentSourcePositionY =
@@ -3777,7 +3834,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let reverbSendGain = options.reverbsendgain
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
@@ -3821,7 +3878,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let reverbSendGain = options.reverbsendgain
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
@@ -3933,7 +3990,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
@@ -3977,7 +4034,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
@@ -4159,7 +4216,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
@@ -4203,7 +4260,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
@@ -4315,7 +4372,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeter = options.levelmeter
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
@@ -4359,7 +4416,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let matrixInput = options.matrixinput
+				let matrixInput = options.matrixinput.toString()
 				let levelMeter = options.levelmeter
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
@@ -4677,8 +4734,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
-				let soundObject = options.soundobject
+				let functionGroup = options.functiongroup.toString()
+				let soundObject = options.soundobject.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
@@ -4731,8 +4788,8 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
-				let soundObject = options.soundobject
+				let functionGroup = options.functiongroup.toString()
+				let soundObject = options.soundobject.toString()
 				let gain = options.gain
 
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
@@ -4815,7 +4872,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
+				let functionGroup = options.functiongroup.toString()
 				let spreadFactor = options.spreadfactor
 
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
@@ -4863,7 +4920,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
+				let functionGroup = options.functiongroup.toString()
 				let spreadFactor = options.spreadfactor
 
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
@@ -4950,7 +5007,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
+				let functionGroup = options.functiongroup.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
@@ -4998,7 +5055,7 @@ module.exports = {
 			],
 			callback: async function (action) {
 				let options = action.options
-				let functionGroup = options.functiongroup
+				let functionGroup = options.functiongroup.toString()
 				let delay = options.delay
 
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
