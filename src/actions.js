@@ -3,7 +3,7 @@ module.exports = {
 		let self = this
 		let actions = {}
 
-		actions.setDeviceName = {
+		/*actions.setDeviceName = {
 			name: 'Set Device Name',
 			description: 'Set the name of the devic. When connected to R1, this will be overwritten by R1.',
 			options: [
@@ -28,7 +28,7 @@ module.exports = {
 
 				self.sendCommand('/settings/devicename', args)
 			},
-		}
+		}*/
 
 		actions.setMatrixInputMute = {
 			name: 'Matrix Input - Mute',
@@ -136,6 +136,8 @@ module.exports = {
 				]
 
 				self.sendCommand('/matrixinput/gain/' + matrixInput, args)
+
+				console.log('Matrix Input Gain: ' + matrixInput + ' ' + gain)
 			},
 		}
 
@@ -198,7 +200,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					if (gain > 24.0) {
@@ -247,7 +249,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixInput[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					if (gain < -120.0) {
@@ -364,7 +366,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
 					if (delay > 500.0) {
@@ -413,7 +415,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixInput[matrixInput].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
 					if (delay < 0.0) {
@@ -777,7 +779,7 @@ module.exports = {
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
-				if (currentLevelMeterPreMute) {
+				if (currentLevelMeterPreMute !== undefined) {
 					let newLevelMeterPreMute = currentLevelMeterPreMute + levelMeterPreMute
 
 					if (levelMeterPreMute > 0.0) {
@@ -826,7 +828,7 @@ module.exports = {
 
 				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
 
-				if (currentLevelMeterPreMute) {
+				if (currentLevelMeterPreMute !== undefined) {
 					let newLevelMeterPreMute = currentLevelMeterPreMute - levelMeterPreMute
 
 					if (levelMeterPreMute < -120.0) {
@@ -943,7 +945,7 @@ module.exports = {
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
-				if (currentLevelMeterPostMute) {
+				if (currentLevelMeterPostMute !== undefined) {
 					let newLevelMeterPostMute = currentLevelMeterPostMute + levelMeterPostMute
 
 					if (levelMeterPostMute > 0.0) {
@@ -992,7 +994,7 @@ module.exports = {
 
 				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
 
-				if (currentLevelMeterPostMute) {
+				if (currentLevelMeterPostMute !== undefined) {
 					let newLevelMeterPostMute = currentLevelMeterPostMute - levelMeterPostMute
 
 					if (levelMeterPostMute < -120.0) {
@@ -1178,7 +1180,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixNode[input][output].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					if (gain > 10.0) {
@@ -1238,7 +1240,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixNode[input][output].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					if (gain < -120.0) {
@@ -1454,7 +1456,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixNode[input][output].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
 					if (delay > 500.0) {
@@ -1514,7 +1516,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixNode[input][output].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
 					if (delay < 0.0) {
@@ -1701,7 +1703,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					if (gain > 24.0) {
@@ -1750,7 +1752,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.matrixOutput[matrixOutput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					if (gain < -120.0) {
@@ -1867,7 +1869,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
 					if (delay > 500.0) {
@@ -1916,7 +1918,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.matrixOutput[matrixOutput].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
 					if (delay < 0.0) {
@@ -2280,7 +2282,7 @@ module.exports = {
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
-				if (currentLevelMeterPreMute) {
+				if (currentLevelMeterPreMute !== undefined) {
 					let newLevelMeterPreMute = currentLevelMeterPreMute + levelMeterPreMute
 
 					if (levelMeterPreMute > 0.0) {
@@ -2329,7 +2331,7 @@ module.exports = {
 
 				let currentLevelMeterPreMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPreMute
 
-				if (currentLevelMeterPreMute) {
+				if (currentLevelMeterPreMute !== undefined) {
 					let newLevelMeterPreMute = currentLevelMeterPreMute - levelMeterPreMute
 
 					if (levelMeterPreMute < -120.0) {
@@ -2446,7 +2448,7 @@ module.exports = {
 
 				let currentLevelMeterPostMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
 
-				if (currentLevelMeterPostMute) {
+				if (currentLevelMeterPostMute !== undefined) {
 					let newLevelMeterPostMute = currentLevelMeterPostMute + levelMeterPostMute
 
 					if (levelMeterPostMute > 0.0) {
@@ -2495,7 +2497,7 @@ module.exports = {
 
 				let currentLevelMeterPostMute = self.DATA?.matrixOutput[matrixOutput].levelMeterPostMute
 
-				if (currentLevelMeterPostMute) {
+				if (currentLevelMeterPostMute !== undefined) {
 					let newLevelMeterPostMute = currentLevelMeterPostMute - levelMeterPostMute
 
 					if (levelMeterPostMute < -120.0) {
@@ -2583,7 +2585,7 @@ module.exports = {
 
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
 
-				if (currentSourceSpread) {
+				if (currentSourceSpread !== undefined) {
 					let newSourceSpread = currentSourceSpread + sourceSpread
 
 					if (sourceSpread > 1.0) {
@@ -2632,7 +2634,7 @@ module.exports = {
 
 				let currentSourceSpread = self.DATA?.soundObject[soundObject].sourceSpread
 
-				if (currentSourceSpread) {
+				if (currentSourceSpread !== undefined) {
 					let newSourceSpread = currentSourceSpread - sourceSpread
 
 					if (sourceSpread < 0.0) {
@@ -2862,7 +2864,7 @@ module.exports = {
 
 				let currentSourcePositionX = self.DATA?.positioning[id].sourcePositionX
 
-				if (currentSourcePositionX) {
+				if (currentSourcePositionX !== undefined) {
 					let newSourcePositionX = currentSourcePositionX + sourcePositionX
 
 					let args = [
@@ -2906,7 +2908,7 @@ module.exports = {
 
 				let currentSourcePositionX = self.DATA?.positioning[id].sourcePositionX
 
-				if (currentSourcePositionX) {
+				if (currentSourcePositionX !== undefined) {
 					let newSourcePositionX = currentSourcePositionX - sourcePositionX
 
 					let args = [
@@ -2986,7 +2988,7 @@ module.exports = {
 
 				let currentSourcePositionY = self.DATA?.positioning[id].sourcePositionY
 
-				if (currentSourcePositionY) {
+				if (currentSourcePositionY !== undefined) {
 					let newSourcePositionY = currentSourcePositionY + sourcePositionY
 
 					let args = [
@@ -3030,7 +3032,7 @@ module.exports = {
 
 				let currentSourcePositionY = self.DATA?.positioning[id].sourcePositionY
 
-				if (currentSourcePositionY) {
+				if (currentSourcePositionY !== undefined) {
 					let newSourcePositionY = currentSourcePositionY - sourcePositionY
 
 					let args = [
@@ -3265,7 +3267,7 @@ module.exports = {
 				let currentSourcePositionX =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionX
 
-				if (currentSourcePositionX) {
+				if (currentSourcePositionX !== undefined) {
 					let newSourcePositionX = currentSourcePositionX + sourcePositionX
 
 					let args = [
@@ -3323,7 +3325,7 @@ module.exports = {
 				let currentSourcePositionX =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionX
 
-				if (currentSourcePositionX) {
+				if (currentSourcePositionX !== undefined) {
 					let newSourcePositionX = currentSourcePositionX - sourcePositionX
 
 					let args = [
@@ -3429,7 +3431,7 @@ module.exports = {
 				let currentSourcePositionY =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionY
 
-				if (currentSourcePositionY) {
+				if (currentSourcePositionY !== undefined) {
 					let newSourcePositionY = currentSourcePositionY + sourcePositionY
 
 					let args = [
@@ -3487,7 +3489,7 @@ module.exports = {
 				let currentSourcePositionY =
 					self.DATA?.coordinateMapping[coordinateMappingArea][soundObject].sourcePositionY
 
-				if (currentSourcePositionY) {
+				if (currentSourcePositionY !== undefined) {
 					let newSourcePositionY = currentSourcePositionY - sourcePositionY
 
 					let args = [
@@ -3580,7 +3582,7 @@ module.exports = {
 
 				let currentReverbPreDelayFactor = self.DATA?.matrixSettings.reverbPreDelayFactor
 
-				if (currentReverbPreDelayFactor) {
+				if (currentReverbPreDelayFactor !== undefined) {
 					let newReverbPreDelayFactor = currentReverbPreDelayFactor + reverbPreDelayFactor
 
 					if (reverbPreDelayFactor > 2.0) {
@@ -3618,7 +3620,7 @@ module.exports = {
 
 				let currentReverbPreDelayFactor = self.DATA?.matrixSettings.reverbPreDelayFactor
 
-				if (currentReverbPreDelayFactor) {
+				if (currentReverbPreDelayFactor !== undefined) {
 					let newReverbPreDelayFactor = currentReverbPreDelayFactor - reverbPreDelayFactor
 
 					if (reverbPreDelayFactor < 0.2) {
@@ -3685,7 +3687,7 @@ module.exports = {
 
 				let currentReverbRearLevel = self.DATA?.matrixSettings.reverbRearLevel
 
-				if (currentReverbRearLevel) {
+				if (currentReverbRearLevel !== undefined) {
 					let newReverbRearLevel = currentReverbRearLevel + reverbRearLevel
 
 					if (reverbRearLevel > 24.0) {
@@ -3723,7 +3725,7 @@ module.exports = {
 
 				let currentReverbRearLevel = self.DATA?.matrixSettings.reverbRearLevel
 
-				if (currentReverbRearLevel) {
+				if (currentReverbRearLevel !== undefined) {
 					let newReverbRearLevel = currentReverbRearLevel - reverbRearLevel
 
 					if (reverbRearLevel < -24.0) {
@@ -3839,7 +3841,7 @@ module.exports = {
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
 
-				if (currentReverbSendGain) {
+				if (currentReverbSendGain !== undefined) {
 					let newReverbSendGain = currentReverbSendGain + reverbSendGain
 
 					let args = [
@@ -3883,7 +3885,7 @@ module.exports = {
 
 				let currentReverbSendGain = self.DATA?.matrixInput[matrixInput].reverbSendGain
 
-				if (currentReverbSendGain) {
+				if (currentReverbSendGain !== undefined) {
 					let newReverbSendGain = currentReverbSendGain - reverbSendGain
 
 					let args = [
@@ -3995,7 +3997,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					let args = [
@@ -4039,7 +4041,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.reverbInput[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					let args = [
@@ -4221,7 +4223,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					let args = [
@@ -4265,7 +4267,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.reverbInputProcessing[matrixInput].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					let args = [
@@ -4377,7 +4379,7 @@ module.exports = {
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
-				if (currentLevelMeter) {
+				if (currentLevelMeter !== undefined) {
 					let newLevelMeter = currentLevelMeter + levelMeter
 
 					let args = [
@@ -4421,7 +4423,7 @@ module.exports = {
 
 				let currentLevelMeter = self.DATA?.reverbInputProcessing[matrixInput].levelMeter
 
-				if (currentLevelMeter) {
+				if (currentLevelMeter !== undefined) {
 					let newLevelMeter = currentLevelMeter - levelMeter
 
 					let args = [
@@ -4740,7 +4742,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
 					let args = [
@@ -4794,7 +4796,7 @@ module.exports = {
 
 				let currentGain = self.DATA?.soundObjectRouting[functionGroup][soundObject].gain
 
-				if (currentGain) {
+				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
 					let args = [
@@ -4877,7 +4879,7 @@ module.exports = {
 
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
 
-				if (currentSpreadFactor) {
+				if (currentSpreadFactor !== undefined) {
 					let newSpreadFactor = currentSpreadFactor + spreadFactor
 
 					if (spreadFactor > 2.0) {
@@ -4925,7 +4927,7 @@ module.exports = {
 
 				let currentSpreadFactor = self.DATA?.functionGroup[functionGroup].spreadFactor
 
-				if (currentSpreadFactor) {
+				if (currentSpreadFactor !== undefined) {
 					let newSpreadFactor = currentSpreadFactor - spreadFactor
 
 					if (spreadFactor < 0.5) {
@@ -5012,7 +5014,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
 					if (delay > 500.0) {
@@ -5060,7 +5062,7 @@ module.exports = {
 
 				let currentDelay = self.DATA?.functionGroup[functionGroup].delay
 
-				if (currentDelay) {
+				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
 					if (delay < 0.0) {
