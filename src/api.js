@@ -317,7 +317,7 @@ module.exports = {
 				self.DATA.errorText = value
 				variableObj = { error_text: value }
 
-				if (value !== '') {
+				if (value !== '' && value !== 'ok') {
 					self.log('error', `Error Text: ${value}`)
 				}
 			} else if (address.indexOf('/settings/devicename') !== -1) {
@@ -705,7 +705,6 @@ module.exports = {
 				variableObj = { [`coordinatemappingsettings_flip_${id}`]: value }
 			} else if (address.indexOf('/coordinatemappingsettings/name/') !== -1) {
 				let id = address.split('/')[4].toString()
-				console.log('id is : ' + id)
 				self.DATA.coordinateMappingSettings.name[id] = value
 				variableObj = { [`coordinatemappingsettings_name_${id}`]: value }
 			}
