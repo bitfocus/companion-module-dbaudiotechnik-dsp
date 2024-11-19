@@ -73,6 +73,37 @@ module.exports = {
 			},
 			{
 				type: 'checkbox',
+				id: 'polling',
+				label: 'Enable Polling',
+				width: 3,
+				default: false,
+			},
+			{
+				type: 'number',
+				id: 'pollInterval',
+				label: 'Polling Interval (ms)',
+				width: 3,
+				default: 500, // 1 second default
+				min: 100,
+				max: 60000, // 1 minute max
+				isVisible: (config) => config.polling === true,
+			},
+			{
+				type: 'static-text',
+				id: 'info3',
+				width: 6,
+				label: ' ',
+				value: `Polling will periodically query the device for its current state.`,
+			},
+			{
+				type: 'static-text',
+				id: 'hr4',
+				width: 12,
+				label: ' ',
+				value: '<hr />',
+			},
+			{
+				type: 'checkbox',
 				id: 'verbose',
 				label: 'Enable Verbose Logging',
 				default: false,

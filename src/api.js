@@ -27,7 +27,7 @@ module.exports = {
 			deviceName: '',
 			statusText: '',
 			audioNetworkSampleStatus: null,
-		
+
 			// Matrix input data
 			matrixInput: Array.from({ length: 64 }, () => ({
 				mute: null,
@@ -39,9 +39,9 @@ module.exports = {
 				channelName: '',
 				levelMeterPreMute: null,
 				levelMeterPostMute: null,
-				reverbSendGain: null
+				reverbSendGain: null,
 			})),
-		
+
 			// Matrix output data
 			matrixOutput: Array.from({ length: 64 }, () => ({
 				mute: null,
@@ -52,19 +52,19 @@ module.exports = {
 				polarity: null,
 				channelName: '',
 				levelMeterPreMute: null,
-				levelMeterPostMute: null
+				levelMeterPostMute: null,
 			})),
-		
+
 			// Matrix node data
 			matrixNode: Array.from({ length: 64 }, () =>
 				Array.from({ length: 64 }, () => ({
 					enable: null,
 					gain: null,
 					delay: null,
-					delayEnable: null
+					delayEnable: null,
 				}))
 			),
-		
+
 			// Positioning data
 			positioning: {
 				sourcePositionX: null,
@@ -75,32 +75,32 @@ module.exports = {
 					y: null,
 					z: null,
 					h: null,
-					v: null
-				}))
+					v: null,
+				})),
 			},
-		
+
 			// Reverb input processing data
 			reverbInputProcessing: Array.from({ length: 64 }, () => ({
 				mute: null,
 				gain: null,
 				levelMeter: null,
-				eqEnable: null
+				eqEnable: null,
 			})),
-		
+
 			// Scene data
 			sceneIndex: null,
 			sceneName: '',
 			sceneComment: '',
-		
+
 			// Coordinate mapping data
 			coordinateMapping: Array.from({ length: 64 }, () =>
 				Array.from({ length: 64 }, () => ({
 					sourcePositionX: null,
 					sourcePositionY: null,
-					sourcePositionZ: null
+					sourcePositionZ: null,
 				}))
 			),
-		
+
 			// Coordinate mapping settings
 			coordinateMappingSettings: {
 				p1Real: Array(64).fill(null),
@@ -110,17 +110,16 @@ module.exports = {
 				p1Virtual: Array(64).fill(null),
 				p3Virtual: Array(64).fill(null),
 				flip: Array(64).fill(null),
-				name: Array(64).fill('')
+				name: Array(64).fill(''),
 			},
-		
+
 			// Matrix settings
 			matrixSettings: {
 				reverbRoomId: null,
 				reverbPreDelayFactor: null,
-				reverbRearLevel: null
-			}
-		};
-		
+				reverbRearLevel: null,
+			},
+		}
 	},
 
 	initOSC() {
@@ -158,11 +157,31 @@ module.exports = {
 			self.log('info', 'OSC port is in "ready" state')
 			self.updateStatus(InstanceStatus.Ok)
 			self.getData()
+
+			//make sure polling is enabled, and if so, the poll interval is set
+			if (self.config.polling == true) {
+				if (self.config.pollInterval == undefined) {
+					self.config.pollInterval = 500 //default to 500ms
+				}
+
+				if (self.config.verbose) {
+					self.log('info', `Polling is enabled with an interval of ${self.config.pollInterval}ms`)
+				}
+
+				self.INTERVAL = setInterval(() => {
+					self.getData()
+				}, self.config.pollInterval)
+			}
 		})
 
 		self.osc.on('close', () => {
 			self.log('info', 'OSC port is closed')
 			self.updateStatus(InstanceStatus.ConnectionFailure, 'Connection Closed')
+
+			//try to reconnect
+			self.RECONNECT_INTERVAL = setInterval(() => {
+				self.initConnection()
+			}, 30000) //30 seconds
 		})
 
 		self.osc.on('error', (err) => {
@@ -382,9 +401,7 @@ module.exports = {
 				//console.log('id was : ' + id)
 				self.DATA.matrixInput[id].levelMeterPostMute = value
 				variableObj = { [`matrixinput${id}_level_meter_post_mute`]: value }
-			}
-			
-			else if (address.indexOf('/matrixnode/enable/') !== -1) {
+			} else if (address.indexOf('/matrixnode/enable/') !== -1) {
 				let id = address.split('/')[4].toString()
 				let id2 = address.split('/')[5].toString()
 				self.DATA.matrixNode[id][id2].enable = value
@@ -406,14 +423,12 @@ module.exports = {
 				let id2 = address.split('/')[5].toString()
 				self.DATA.matrixNode[id][id2].delay = value
 				variableObj = { [`matrixnode${id}_${id2}_delay`]: value }
-			}
-			
-			else if (address.indexOf('/matrixoutput/mute/') !== -1) {
+			} else if (address.indexOf('/matrixoutput/mute/') !== -1) {
 				let id = address.split('/')[4].toString()
 				self.DATA.matrixOutput[id].mute = value
 				let valueFriendly = value === 1 ? 'On' : 'Off'
 				variableObj = { [`matrixoutput${id}_mute`]: valueFriendly }
-			}  else if (address.indexOf('/matrixoutput/gain/') !== -1) {
+			} else if (address.indexOf('/matrixoutput/gain/') !== -1) {
 				let id = address.split('/')[4].toString()
 				self.DATA.matrixOutput[id].gain = value
 				variableObj = { [`matrixoutput${id}_gain`]: value }
