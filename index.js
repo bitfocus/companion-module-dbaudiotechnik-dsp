@@ -1,4 +1,4 @@
-// D&B Audiotechnik DSP
+// d&b audiotechnik DSP
 const { InstanceBase, InstanceStatus, runEntrypoint } = require('@companion-module/base')
 const upgrades = require('./src/upgrades')
 
@@ -50,8 +50,30 @@ class dbaudiotechnikDspInstance extends InstanceBase {
 	async configUpdated(config) {
 		this.config = config
 
-		this.initConnection()
+		// Set matrix counts from configured scalable I/O option. Will be overridden dynamically
+		// by /status/matrixinputcount and /status/matrixoutputcount once the device responds.
+		const matrixSize = config.matrixSize || 'L'
+		if (matrixSize === 'S') {
+			this.matrixInputCount = 64
+			this.matrixOutputCount = 24
+		} else if (matrixSize === 'XL') {
+			this.matrixInputCount = 128
+			this.matrixOutputCount = 64
+		} else {
+			// L (Large) – default
+			this.matrixInputCount = 64
+			this.matrixOutputCount = 64
+		}
 
+		this.initActions()
+		this.initFeedbacks()
+		this.initVariables()
+		this.initPresets()
+
+		this.initConnection()
+	}
+
+	rebuildFromDeviceCounts() {
 		this.initActions()
 		this.initFeedbacks()
 		this.initVariables()

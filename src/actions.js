@@ -40,7 +40,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -110,7 +110,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -180,7 +180,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -229,7 +229,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -278,7 +278,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -346,7 +346,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -395,7 +395,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -444,7 +444,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -514,7 +514,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -584,7 +584,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -654,7 +654,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -681,338 +681,6 @@ module.exports = {
 			},
 		}
 
-		actions.setMatrixInputLevelMeterPreMute = {
-			name: 'Matrix Input - Level Meter Pre Mute',
-			description: 'Set the Level Meter Pre Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Pre Mute',
-					id: 'levelmeterpremute',
-					default: 0,
-					min: -120.0,
-					max: 0.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput
-				let levelMeterPreMute = options.levelmeterpremute
-
-				let args = [
-					{
-						type: 'f',
-						value: levelMeterPreMute,
-					},
-				]
-
-				self.sendCommand('/matrixinput/levelmeterpremute/' + matrixInput, args)
-			},
-		}
-
-		actions.setMatrixInputLevelMeterPreMuteAll = {
-			name: 'Matrix Input - Level Meter Pre Mute All',
-			description: 'Set the Level Meter Pre Mute of all Matrix Inputs',
-			options: [
-				{
-					type: 'number',
-					label: 'Level Meter Pre Mute',
-					id: 'levelmeterpremute',
-					default: 0,
-					min: -120.0,
-					max: 0.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let levelMeterPreMute = options.levelmeterpremute
-
-				let args = [
-					{
-						type: 'f',
-						value: levelMeterPreMute,
-					},
-				]
-
-				self.sendCommand('/matrixinput/levelmeterpremute/' + '*', args)
-			},
-		}
-
-		actions.increaseMatrixInputLevelMeterPreMute = {
-			name: 'Matrix Input - Increase Level Meter Pre Mute',
-			description: 'Increase the Level Meter Pre Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Pre Mute Increase Amount',
-					id: 'levelmeterpremute',
-					default: 1,
-					min: 0.1,
-					max: 6.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput.toString()
-				let levelMeterPreMute = options.levelmeterpremute
-
-				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
-
-				if (currentLevelMeterPreMute !== undefined) {
-					let newLevelMeterPreMute = currentLevelMeterPreMute + levelMeterPreMute
-
-					if (levelMeterPreMute > 0.0) {
-						levelMeterPreMute = 0.0
-					}
-
-					let args = [
-						{
-							type: 'f',
-							value: newLevelMeterPreMute,
-						},
-					]
-
-					self.sendCommand('/matrixinput/levelmeterpremute/' + matrixInput, args)
-				}
-			},
-		}
-
-		actions.decreaseMatrixInputLevelMeterPreMute = {
-			name: 'Matrix Input - Decrease Level Meter Pre Mute',
-			description: 'Decrease the Level Meter Pre Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Pre Mute Decrease Amount',
-					id: 'levelmeterpremute',
-					default: 1,
-					min: 0.1,
-					max: 6.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput.toString()
-				let levelMeterPreMute = options.levelmeterpremute
-
-				let currentLevelMeterPreMute = self.DATA?.matrixInput[matrixInput].levelMeterPreMute
-
-				if (currentLevelMeterPreMute !== undefined) {
-					let newLevelMeterPreMute = currentLevelMeterPreMute - levelMeterPreMute
-
-					if (levelMeterPreMute < -120.0) {
-						levelMeterPreMute = -120.0
-					}
-
-					let args = [
-						{
-							type: 'f',
-							value: newLevelMeterPreMute,
-						},
-					]
-
-					self.sendCommand('/matrixinput/levelmeterpremute/' + matrixInput, args)
-				}
-			},
-		}
-
-		actions.setMatrixInputLevelMeterPostMute = {
-			name: 'Matrix Input - Level Meter Post Mute',
-			description: 'Set the Level Meter Post Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Post Mute',
-					id: 'levelmeterpostmute',
-					default: 0,
-					min: -120.0,
-					max: 0.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput
-				let levelMeterPostMute = options.levelmeterpostmute
-
-				let args = [
-					{
-						type: 'f',
-						value: levelMeterPostMute,
-					},
-				]
-
-				self.sendCommand('/matrixinput/levelmeterpostmute/' + matrixInput, args)
-			},
-		}
-
-		actions.setMatrixInputLevelMeterPostMuteAll = {
-			name: 'Matrix Input - Level Meter Post Mute All',
-			description: 'Set the Level Meter Post Mute of all Matrix Inputs',
-			options: [
-				{
-					type: 'number',
-					label: 'Level Meter Post Mute',
-					id: 'levelmeterpostmute',
-					default: 0,
-					min: -120.0,
-					max: 0.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let levelMeterPostMute = options.levelmeterpostmute
-
-				let args = [
-					{
-						type: 'f',
-						value: levelMeterPostMute,
-					},
-				]
-
-				self.sendCommand('/matrixinput/levelmeterpostmute/' + '*', args)
-			},
-		}
-
-		actions.increaseMatrixInputLevelMeterPostMute = {
-			name: 'Matrix Input - Increase Level Meter Post Mute',
-			description: 'Increase the Level Meter Post Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Post Mute Increase Amount',
-					id: 'levelmeterpostmute',
-					default: 1,
-					min: 0.1,
-					max: 6.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput.toString()
-				let levelMeterPostMute = options.levelmeterpostmute
-
-				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
-
-				if (currentLevelMeterPostMute !== undefined) {
-					let newLevelMeterPostMute = currentLevelMeterPostMute + levelMeterPostMute
-
-					if (levelMeterPostMute > 0.0) {
-						levelMeterPostMute = 0.0
-					}
-
-					let args = [
-						{
-							type: 'f',
-							value: newLevelMeterPostMute,
-						},
-					]
-
-					self.sendCommand('/matrixinput/levelmeterpostmute/' + matrixInput, args)
-				}
-			},
-		}
-
-		actions.decreaseMatrixInputLevelMeterPostMute = {
-			name: 'Matrix Input - Decrease Level Meter Post Mute',
-			description: 'Decrease the Level Meter Post Mute of a Matrix Input',
-			options: [
-				{
-					type: 'number',
-					label: 'Matrix Input',
-					id: 'matrixinput',
-					default: 1,
-					min: 1,
-					max: 64,
-					required: true,
-				},
-				{
-					type: 'number',
-					label: 'Level Meter Post Mute Decrease Amount',
-					id: 'levelmeterpostmute',
-					default: 1,
-					min: 0.1,
-					max: 6.0,
-					required: true,
-				},
-			],
-			callback: async function (action) {
-				let options = action.options
-				let matrixInput = options.matrixinput.toString()
-				let levelMeterPostMute = options.levelmeterpostmute
-
-				let currentLevelMeterPostMute = self.DATA?.matrixInput[matrixInput].levelMeterPostMute
-
-				if (currentLevelMeterPostMute !== undefined) {
-					let newLevelMeterPostMute = currentLevelMeterPostMute - levelMeterPostMute
-
-					if (levelMeterPostMute < -120.0) {
-						levelMeterPostMute = -120.0
-					}
-
-					let args = [
-						{
-							type: 'f',
-							value: newLevelMeterPostMute,
-						},
-					]
-
-					self.sendCommand('/matrixinput/levelmeterpostmute/' + matrixInput, args)
-				}
-			},
-		}
-
 		actions.setMatrixNodeEnable = {
 			name: 'Matrix Node - Enable',
 			description: 'Enable or Disable a Matrix Node',
@@ -1023,7 +691,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1032,7 +700,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1072,7 +740,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1081,7 +749,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1149,7 +817,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1158,7 +826,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1209,7 +877,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1218,7 +886,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1269,7 +937,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1278,7 +946,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1348,7 +1016,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1357,7 +1025,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1425,7 +1093,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1434,7 +1102,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1485,7 +1153,7 @@ module.exports = {
 					id: 'input',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -1494,7 +1162,7 @@ module.exports = {
 					id: 'output',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1545,7 +1213,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1615,7 +1283,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1683,7 +1351,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1732,7 +1400,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1781,7 +1449,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1849,7 +1517,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1898,7 +1566,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -1947,7 +1615,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2017,7 +1685,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2087,7 +1755,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2157,7 +1825,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2194,7 +1862,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2262,7 +1930,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2311,7 +1979,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2360,7 +2028,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2428,7 +2096,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2477,7 +2145,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 				{
@@ -2526,7 +2194,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2565,7 +2233,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2614,7 +2282,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2663,7 +2331,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2704,7 +2372,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2762,7 +2430,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2809,7 +2477,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2845,7 +2513,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2889,7 +2557,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2933,7 +2601,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -2969,7 +2637,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3013,7 +2681,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3066,7 +2734,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3137,7 +2805,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3197,7 +2865,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3246,7 +2914,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3304,7 +2972,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3362,7 +3030,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3411,7 +3079,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3468,7 +3136,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3754,7 +3422,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3822,7 +3490,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3866,7 +3534,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3910,7 +3578,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -3978,7 +3646,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -4022,7 +3690,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -4623,7 +4291,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -4673,7 +4341,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -4722,7 +4390,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{
@@ -4776,7 +4444,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 				{

@@ -22,6 +22,6 @@ module.exports = {
 		matrixOutput: {},
 		positioning: {},
 		coordinateMapping: {},
-		sounbObjectRouting: {},
+		soundObjectRouting: {},
 	},
 }
