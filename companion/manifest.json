@@ -2,12 +2,16 @@
 	"id": "dbaudiotechnik-dsp",
 	"name": "dbaudiotechnik-dsp",
 	"shortname": "dbaudiotechnik-dsp",
-	"description": "Module to control D&B Audiotechnik DSPs",
-	"version": "0.0.0",
+	"description": "Module to control d&b audiotechnik DSPs",
+	"version": "1.1.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-dbaudiotechnik-dsp.git",
 	"bugs": "https://github.com/bitfocus/companion-module-dbaudiotechnik-dsp/issues",
 	"maintainers": [
+		{
+			"name": "Linus Wileryd",
+			"email": "linus@cutup.se"
+		},
 		{
 			"name": "Joseph Adams",
 			"email": "josephdadams@gmail.com"
@@ -20,7 +24,7 @@
 		"apiVersion": "0.0.0",
 		"entrypoint": "../index.js"
 	},
-	"manufacturer": "D&B Audiotechnik",
-	"products": ["DS100"],
+	"manufacturer": "d&b audiotechnik",
+	"products": ["DS100", "DS100M"],
 	"keywords": ["DSP", "Audio"]
 }
