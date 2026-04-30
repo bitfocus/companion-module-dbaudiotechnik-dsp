@@ -10,8 +10,10 @@ module.exports = {
 			variableId: 'status_audio_network_sample_status',
 			name: 'Status - Audio Network Sample Status',
 		})
+		variables.push({ variableId: 'status_matrixinputcount', name: 'Status - Matrix Input Count' })
+		variables.push({ variableId: 'status_matrixoutputcount', name: 'Status - Matrix Output Count' })
 
-		for (let i = 1; i <= 64; i++) {
+		for (let i = 1; i <= self.matrixInputCount; i++) {
 			variables.push({ variableId: `matrixinput${i}_mute`, name: `Matrix Input ${i} - Mute` })
 			variables.push({ variableId: `matrixinput${i}_gain`, name: `Matrix Input ${i} - Gain` })
 			variables.push({ variableId: `matrixinput${i}_delay`, name: `Matrix Input ${i} - Delay` })
@@ -29,8 +31,8 @@ module.exports = {
 			})
 		}
 
-		for (let i = 1; i <= 64; i++) {
-			for (let j = 1; j <= 64; j++) {
+		for (let i = 1; i <= self.matrixInputCount; i++) {
+			for (let j = 1; j <= self.matrixOutputCount; j++) {
 				variables.push({ variableId: `matrixnode${i}_${j}_enable`, name: `Matrix Node ${i} - ${j} - Enable` })
 				variables.push({ variableId: `matrixnode${i}_${j}_gain`, name: `Matrix Node ${i} - ${j} - Gain` })
 				variables.push({
@@ -41,7 +43,7 @@ module.exports = {
 			}
 		}
 
-		for (let i = 1; i <= 64; i++) {
+		for (let i = 1; i <= self.matrixOutputCount; i++) {
 			variables.push({ variableId: `matrixoutput${i}_mute`, name: `Matrix Output ${i} - Mute` })
 			variables.push({ variableId: `matrixoutput${i}_gain`, name: `Matrix Output ${i} - Gain` })
 			variables.push({ variableId: `matrixoutput${i}_delay`, name: `Matrix Output ${i} - Delay` })

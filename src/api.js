@@ -28,8 +28,8 @@ module.exports = {
 			statusText: '',
 			audioNetworkSampleStatus: null,
 
-			// Matrix input data
-			matrixInput: Array.from({ length: 64 }, () => ({
+				// Matrix input data
+			matrixInput: Array.from({ length: self.matrixInputCount + 1 }, () => ({
 				mute: null,
 				gain: null,
 				delay: null,
@@ -42,8 +42,8 @@ module.exports = {
 				reverbSendGain: null,
 			})),
 
-			// Matrix output data
-			matrixOutput: Array.from({ length: 64 }, () => ({
+				// Matrix output data
+			matrixOutput: Array.from({ length: self.matrixOutputCount + 1 }, () => ({
 				mute: null,
 				gain: null,
 				delay: null,
@@ -55,9 +55,9 @@ module.exports = {
 				levelMeterPostMute: null,
 			})),
 
-			// Matrix node data
-			matrixNode: Array.from({ length: 64 }, () =>
-				Array.from({ length: 64 }, () => ({
+				// Matrix node data
+			matrixNode: Array.from({ length: self.matrixInputCount + 1 }, () =>
+				Array.from({ length: self.matrixOutputCount + 1 }, () => ({
 					enable: null,
 					gain: null,
 					delay: null,
@@ -70,7 +70,7 @@ module.exports = {
 				sourcePositionX: null,
 				sourcePositionY: null,
 				sourcePositionZ: null,
-				speakerPosition: Array.from({ length: 64 }, () => ({
+				speakerPosition: Array.from({ length: self.matrixOutputCount + 1 }, () => ({
 					x: null,
 					y: null,
 					z: null,
@@ -79,8 +79,11 @@ module.exports = {
 				})),
 			},
 
+				// Reverb input data (En-Space send gain per zone)
+			reverbInput: Array.from({ length: self.matrixInputCount + 1 }, () => ({ gain: null })),
+
 			// Reverb input processing data
-			reverbInputProcessing: Array.from({ length: 64 }, () => ({
+			reverbInputProcessing: Array.from({ length: self.matrixInputCount + 1 }, () => ({
 				mute: null,
 				gain: null,
 				levelMeter: null,
@@ -92,9 +95,9 @@ module.exports = {
 			sceneName: '',
 			sceneComment: '',
 
-			// Coordinate mapping data
-			coordinateMapping: Array.from({ length: 64 }, () =>
-				Array.from({ length: 64 }, () => ({
+				// Coordinate mapping data
+			coordinateMapping: Array.from({ length: self.matrixInputCount + 1 }, () =>
+				Array.from({ length: self.matrixOutputCount + 1 }, () => ({
 					sourcePositionX: null,
 					sourcePositionY: null,
 					sourcePositionZ: null,
@@ -103,14 +106,14 @@ module.exports = {
 
 			// Coordinate mapping settings
 			coordinateMappingSettings: {
-				p1Real: Array(64).fill(null),
-				p2Real: Array(64).fill(null),
-				p3Real: Array(64).fill(null),
-				p4Real: Array(64).fill(null),
-				p1Virtual: Array(64).fill(null),
-				p3Virtual: Array(64).fill(null),
-				flip: Array(64).fill(null),
-				name: Array(64).fill(''),
+				p1Real: Array(5).fill(null),
+				p2Real: Array(5).fill(null),
+				p3Real: Array(5).fill(null),
+				p4Real: Array(5).fill(null),
+				p1Virtual: Array(5).fill(null),
+				p3Virtual: Array(5).fill(null),
+				flip: Array(5).fill(null),
+				name: Array(5).fill(''),
 			},
 
 			// Matrix settings
@@ -202,6 +205,9 @@ module.exports = {
 		let self = this
 
 		//self.sendCommand('*', [])
+
+		self.sendCommand('/status/matrixinputcount', [])
+		self.sendCommand('/status/matrixoutputcount', [])
 
 		self.sendCommand('/error/gnrlerr', [])
 		self.sendCommand('/error/errortext', [])
@@ -322,7 +328,29 @@ module.exports = {
 		try {
 			let variableObj = {}
 
-			if (address.indexOf('/error/gnrlerr') !== -1) {
+			if (address.indexOf('/status/matrixinputcount') !== -1) {
+				const newCount = value
+				if (newCount !== self.matrixInputCount) {
+					self.matrixInputCount = newCount
+					self.buildDefaultValues()
+					self.rebuildFromDeviceCounts()
+					if (self.config.verbose) {
+						self.log('info', `Matrix input count updated to ${newCount}`)
+					}
+				}
+				variableObj = { status_matrixinputcount: newCount }
+			} else if (address.indexOf('/status/matrixoutputcount') !== -1) {
+				const newCount = value
+				if (newCount !== self.matrixOutputCount) {
+					self.matrixOutputCount = newCount
+					self.buildDefaultValues()
+					self.rebuildFromDeviceCounts()
+					if (self.config.verbose) {
+						self.log('info', `Matrix output count updated to ${newCount}`)
+					}
+				}
+				variableObj = { status_matrixoutputcount: newCount }
+			} else if (address.indexOf('/error/gnrlerr') !== -1) {
 				self.DATA.generalError = value
 				variableObj = { general_error: value }
 
@@ -411,7 +439,7 @@ module.exports = {
 				let id = address.split('/')[4].toString()
 				let id2 = address.split('/')[5].toString()
 				self.DATA.matrixNode[id][id2].gain = value
-				variableObj = { [`matrixnode${id}_{id2}_gain`]: value }
+				variableObj = { [`matrixnode${id}_${id2}_gain`]: value }
 			} else if (address.indexOf('/matrixnode/delayenable/') !== -1) {
 				let id = address.split('/')[4].toString()
 				let id2 = address.split('/')[5].toString()
@@ -493,7 +521,7 @@ module.exports = {
 
 				self.DATA.positioning[id].sourcePositionX = value1
 				self.DATA.positioning[id].sourcePositionY = value2
-				self.DATA.positioningpid.sourcePositionZ = value3
+				self.DATA.positioning[id].sourcePositionZ = value3
 				variableObj = {
 					positioning_source_position_x: value1,
 					positioning_source_position_y: value2,
@@ -595,7 +623,7 @@ module.exports = {
 				let valueFriendly = ''
 				let reverbRoomObj = self.CHOICES_REVERB_ROOMS.find((item) => item.id === value)
 				if (reverbRoomObj) {
-					valueFriendly = valueFriendly.label
+					valueFriendly = reverbRoomObj.label
 				}
 				variableObj = { matrixsettings_reverb_room_id: valueFriendly }
 			} else if (address.indexOf('/matrixsettings/reverbpredelayfactor') !== -1) {

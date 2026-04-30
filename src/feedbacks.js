@@ -23,7 +23,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
@@ -31,7 +31,7 @@ module.exports = {
 				let options = feedback.options
 				let input = options.matrixinput
 
-				if (self.matrixInput[input].mute === 1) {
+				if (self.DATA.matrixInput[input].mute === 1) {
 					return true
 				}
 
@@ -54,7 +54,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
@@ -62,7 +62,7 @@ module.exports = {
 				let options = feedback.options
 				let input = options.matrixinput
 
-				if (self.matrixInput[input].delayEnable === 1) {
+				if (self.DATA.matrixInput[input].delayEnable === 1) {
 					return true
 				}
 
@@ -85,7 +85,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
@@ -93,7 +93,7 @@ module.exports = {
 				let options = feedback.options
 				let input = options.matrixinput
 
-				if (self.matrixInput[input].eqEnable === 1) {
+				if (self.DATA.matrixInput[input].eqEnable === 1) {
 					return true
 				}
 
@@ -116,7 +116,7 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
@@ -124,7 +124,7 @@ module.exports = {
 				let options = feedback.options
 				let input = options.matrixinput
 
-				if (self.matrixInput[input].polarity === 1) {
+				if (self.DATA.matrixInput[input].polarity === 1) {
 					return true
 				}
 
@@ -134,8 +134,8 @@ module.exports = {
 
 		feedbacks.matrixInputLevelMeterPreMute = {
 			type: 'boolean',
-			name: 'Matrix Input - Level Meter Pre Mute',
-			description: 'Change the button color based on the Matrix Input Level Meter Pre Mute State',
+			name: 'Matrix Input - Level Meter Pre Mute Above Threshold',
+			description: 'Lights up when the Matrix Input Pre-Mute level meter reading (dBFS) is at or above the threshold',
 			defaultStyle: {
 				color: colorWhite,
 				bgcolor: colorRed,
@@ -147,26 +147,31 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
+					required: true,
+				},
+				{
+					type: 'number',
+					label: 'Threshold (dBFS)',
+					id: 'threshold',
+					default: -60,
+					min: -120,
+					max: 0,
 					required: true,
 				},
 			],
 			callback: function (feedback, bank) {
 				let options = feedback.options
 				let input = options.matrixinput
-
-				if (self.matrixInput[input].levelMeterPreMute === 1) {
-					return true
-				}
-
-				return false
+				const level = self.DATA.matrixInput[input]?.levelMeterPreMute
+				return level !== null && level !== undefined && level >= options.threshold
 			},
 		}
 
 		feedbacks.matrixInputLevelMeterPostMute = {
 			type: 'boolean',
-			name: 'Matrix Input - Level Meter Post Mute',
-			description: 'Change the button color based on the Matrix Input Level Meter Post Mute State',
+			name: 'Matrix Input - Level Meter Post Mute Above Threshold',
+			description: 'Lights up when the Matrix Input Post-Mute level meter reading (dBFS) is at or above the threshold',
 			defaultStyle: {
 				color: colorWhite,
 				bgcolor: colorRed,
@@ -178,19 +183,24 @@ module.exports = {
 					id: 'matrixinput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
+					required: true,
+				},
+				{
+					type: 'number',
+					label: 'Threshold (dBFS)',
+					id: 'threshold',
+					default: -60,
+					min: -120,
+					max: 0,
 					required: true,
 				},
 			],
 			callback: function (feedback, bank) {
 				let options = feedback.options
 				let input = options.matrixinput
-
-				if (self.matrixInput[input].levelMeterPostMute === 1) {
-					return true
-				}
-
-				return false
+				const level = self.DATA.matrixInput[input]?.levelMeterPostMute
+				return level !== null && level !== undefined && level >= options.threshold
 			},
 		}
 
@@ -209,7 +219,7 @@ module.exports = {
 					id: 'matrixnode',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
@@ -217,7 +227,7 @@ module.exports = {
 				let options = feedback.options
 				let node = options.matrixnode
 
-				if (self.matrixNode[node].enable === 1) {
+				if (self.DATA.matrixNode[node].enable === 1) {
 					return true
 				}
 
@@ -240,7 +250,7 @@ module.exports = {
 					id: 'matrixnode',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 			],
@@ -248,7 +258,7 @@ module.exports = {
 				let options = feedback.options
 				let node = options.matrixnode
 
-				if (self.matrixNode[node].delayEnable === 1) {
+				if (self.DATA.matrixNode[node].delayEnable === 1) {
 					return true
 				}
 
@@ -271,7 +281,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 			],
@@ -279,7 +289,7 @@ module.exports = {
 				let options = feedback.options
 				let output = options.matrixoutput
 
-				if (self.matrixOutput[output].mute === 1) {
+				if (self.DATA.matrixOutput[output].mute === 1) {
 					return true
 				}
 
@@ -302,7 +312,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 			],
@@ -310,7 +320,7 @@ module.exports = {
 				let options = feedback.options
 				let output = options.matrixoutput
 
-				if (self.matrixOutput[output].delayEnable === 1) {
+				if (self.DATA.matrixOutput[output].delayEnable === 1) {
 					return true
 				}
 
@@ -333,7 +343,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 			],
@@ -341,7 +351,7 @@ module.exports = {
 				let options = feedback.options
 				let output = options.matrixoutput
 
-				if (self.matrixOutput[output].eqEnable === 1) {
+				if (self.DATA.matrixOutput[output].eqEnable === 1) {
 					return true
 				}
 
@@ -364,7 +374,7 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
 					required: true,
 				},
 			],
@@ -372,7 +382,7 @@ module.exports = {
 				let options = feedback.options
 				let output = options.matrixoutput
 
-				if (self.matrixOutput[output].polarity === 1) {
+				if (self.DATA.matrixOutput[output].polarity === 1) {
 					return true
 				}
 
@@ -382,8 +392,8 @@ module.exports = {
 
 		feedbacks.matrixOutputLevelMeterPreMute = {
 			type: 'boolean',
-			name: 'Matrix Output - Level Meter Pre Mute',
-			description: 'Change the button color based on the Matrix Output Level Meter Pre Mute State',
+			name: 'Matrix Output - Level Meter Pre Mute Above Threshold',
+			description: 'Lights up when the Matrix Output Pre-Mute level meter reading (dBFS) is at or above the threshold',
 			defaultStyle: {
 				color: colorWhite,
 				bgcolor: colorRed,
@@ -395,26 +405,31 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
+					required: true,
+				},
+				{
+					type: 'number',
+					label: 'Threshold (dBFS)',
+					id: 'threshold',
+					default: -60,
+					min: -120,
+					max: 0,
 					required: true,
 				},
 			],
 			callback: function (feedback, bank) {
 				let options = feedback.options
 				let output = options.matrixoutput
-
-				if (self.matrixOutput[output].levelMeterPreMute === 1) {
-					return true
-				}
-
-				return false
+				const level = self.DATA.matrixOutput[output]?.levelMeterPreMute
+				return level !== null && level !== undefined && level >= options.threshold
 			},
 		}
 
 		feedbacks.matrixOutputLevelMeterPostMute = {
 			type: 'boolean',
-			name: 'Matrix Output - Level Meter Post Mute',
-			description: 'Change the button color based on the Matrix Output Level Meter Post Mute State',
+			name: 'Matrix Output - Level Meter Post Mute Above Threshold',
+			description: 'Lights up when the Matrix Output Post-Mute level meter reading (dBFS) is at or above the threshold',
 			defaultStyle: {
 				color: colorWhite,
 				bgcolor: colorRed,
@@ -426,19 +441,24 @@ module.exports = {
 					id: 'matrixoutput',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixOutputCount,
+					required: true,
+				},
+				{
+					type: 'number',
+					label: 'Threshold (dBFS)',
+					id: 'threshold',
+					default: -60,
+					min: -120,
+					max: 0,
 					required: true,
 				},
 			],
 			callback: function (feedback, bank) {
 				let options = feedback.options
 				let output = options.matrixoutput
-
-				if (self.matrixOutput[output].levelMeterPostMute === 1) {
-					return true
-				}
-
-				return false
+				const level = self.DATA.matrixOutput[output]?.levelMeterPostMute
+				return level !== null && level !== undefined && level >= options.threshold
 			},
 		}
 
@@ -528,7 +548,7 @@ module.exports = {
 					id: 'soundobject',
 					default: 1,
 					min: 1,
-					max: 64,
+     max: self.matrixInputCount,
 					required: true,
 				},
 			],
