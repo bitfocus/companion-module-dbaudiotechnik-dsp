@@ -65,19 +65,23 @@ module.exports = {
 				}))
 			),
 
-			// Positioning data
-			positioning: {
+			// Positioning data (per sound object, indexed by matrix input id)
+			positioning: Array.from({ length: self.matrixInputCount + 1 }, () => ({
+				sourceSpread: null,
+				sourceDelayMode: null,
 				sourcePositionX: null,
 				sourcePositionY: null,
 				sourcePositionZ: null,
-				speakerPosition: Array.from({ length: self.matrixOutputCount + 1 }, () => ({
-					x: null,
-					y: null,
-					z: null,
-					h: null,
-					v: null,
-				})),
-			},
+			})),
+
+			// Speaker position data (per matrix output)
+			speakerPosition: Array.from({ length: self.matrixOutputCount + 1 }, () => ({
+				x: null,
+				y: null,
+				z: null,
+				h: null,
+				v: null,
+			})),
 
 				// Reverb input data (En-Space send gain per zone)
 			reverbInput: Array.from({ length: self.matrixInputCount + 1 }, () => ({ gain: null })),
@@ -122,6 +126,21 @@ module.exports = {
 				reverbPreDelayFactor: null,
 				reverbRearLevel: null,
 			},
+
+			// Sound object routing data (functiongroup 1-32 x matrixInput 1-[iii])
+			soundObjectRouting: Array.from({ length: 33 }, () =>
+				Array.from({ length: self.matrixInputCount + 1 }, () => ({
+					mute: null,
+					gain: null,
+				}))
+			),
+
+			// Function group data (1-32)
+			functionGroup: Array.from({ length: 33 }, () => ({
+				name: '',
+				spreadFactor: null,
+				delay: null,
+			})),
 		}
 	},
 
@@ -508,7 +527,7 @@ module.exports = {
 				} else if (value === 2) {
 					valueFriendly = 'Full'
 				}
-				variableObj = { [`positioning_${id}source_delay_mode`]: valueFriendly }
+				variableObj = { [`positioning_${id}_source_delay_mode`]: valueFriendly }
 			} else if (address.indexOf('/positioning/source_position/') !== -1) {
 				let id = address.split('/')[4].toString()
 
@@ -705,11 +724,11 @@ module.exports = {
 				const value4 = arg4['value']
 				const value5 = arg5['value']
 
-				self.DATA.positioning.speakerPosition[id].x = value1
-				self.DATA.positioning.speakerPosition[id].y = value2
-				self.DATA.positioning.speakerPosition[id].z = value3
-				self.DATA.positioning.speakerPosition[id].h = value4
-				self.DATA.positioning.speakerPosition[id].v = value5
+					self.DATA.speakerPosition[id].x = value1
+					self.DATA.speakerPosition[id].y = value2
+					self.DATA.speakerPosition[id].z = value3
+					self.DATA.speakerPosition[id].h = value4
+					self.DATA.speakerPosition[id].v = value5
 
 				variableObj = {
 					[`speakerposition_x_${id}`]: value1,

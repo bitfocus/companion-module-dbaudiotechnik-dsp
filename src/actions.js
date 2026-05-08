@@ -203,8 +203,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
-					if (gain > 24.0) {
-						gain = 24.0
+					if (newGain > 24.0) {
+						newGain = 24.0
 					}
 
 					let args = [
@@ -252,8 +252,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
-					if (gain < -120.0) {
-						gain = -120.0
+					if (newGain < -120.0) {
+						newGain = -120.0
 					}
 
 					let args = [
@@ -369,8 +369,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
-					if (delay > 500.0) {
-						delay = 500.0
+					if (newDelay > 500.0) {
+						newDelay = 500.0
 					}
 
 					let args = [
@@ -418,8 +418,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
-					if (delay < 0.0) {
-						delay = 0.0
+					if (newDelay < 0.0) {
+						newDelay = 0.0
 					}
 
 					let args = [
@@ -851,8 +851,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
-					if (gain > 10.0) {
-						gain = 10.0
+					if (newGain > 10.0) {
+						newGain = 10.0
 					}
 
 					let args = [
@@ -911,8 +911,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
-					if (gain < -120.0) {
-						gain = -120.0
+					if (newGain < -120.0) {
+						newGain = -120.0
 					}
 
 					let args = [
@@ -1127,8 +1127,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
-					if (delay > 500.0) {
-						delay = 500.0
+					if (newDelay > 500.0) {
+						newDelay = 500.0
 					}
 
 					let args = [
@@ -1187,8 +1187,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
-					if (delay < 0.0) {
-						delay = 0.0
+					if (newDelay < 0.0) {
+						newDelay = 0.0
 					}
 
 					let args = [
@@ -1374,8 +1374,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain + gain
 
-					if (gain > 24.0) {
-						gain = 24.0
+					if (newGain > 24.0) {
+						newGain = 24.0
 					}
 
 					let args = [
@@ -1423,8 +1423,8 @@ module.exports = {
 				if (currentGain !== undefined) {
 					let newGain = currentGain - gain
 
-					if (gain < -120.0) {
-						gain = -120.0
+					if (newGain < -120.0) {
+						newGain = -120.0
 					}
 
 					let args = [
@@ -1540,8 +1540,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
-					if (delay > 500.0) {
-						delay = 500.0
+					if (newDelay > 500.0) {
+						newDelay = 500.0
 					}
 
 					let args = [
@@ -1589,8 +1589,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
-					if (delay < 0.0) {
-						delay = 0.0
+					if (newDelay < 0.0) {
+						newDelay = 0.0
 					}
 
 					let args = [
@@ -4550,8 +4550,8 @@ module.exports = {
 				if (currentSpreadFactor !== undefined) {
 					let newSpreadFactor = currentSpreadFactor + spreadFactor
 
-					if (spreadFactor > 2.0) {
-						spreadFactor = 2.0
+					if (newSpreadFactor > 2.0) {
+						newSpreadFactor = 2.0
 					}
 
 					let args = [
@@ -4598,8 +4598,8 @@ module.exports = {
 				if (currentSpreadFactor !== undefined) {
 					let newSpreadFactor = currentSpreadFactor - spreadFactor
 
-					if (spreadFactor < 0.5) {
-						spreadFactor = 0.5
+					if (newSpreadFactor < 0.5) {
+						newSpreadFactor = 0.5
 					}
 
 					let args = [
@@ -4685,8 +4685,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay + delay
 
-					if (delay > 500.0) {
-						delay = 500.0
+					if (newDelay > 500.0) {
+						newDelay = 500.0
 					}
 
 					let args = [
@@ -4733,8 +4733,8 @@ module.exports = {
 				if (currentDelay !== undefined) {
 					let newDelay = currentDelay - delay
 
-					if (delay < 0.0) {
-						delay = 0.0
+					if (newDelay < 0.0) {
+						newDelay = 0.0
 					}
 
 					let args = [
