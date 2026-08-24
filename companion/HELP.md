@@ -1,23 +1,24 @@
-# d&b audiotechnik DS100 / DS100M
+# d&b audiotechnik DS100 / DS100M / DS110
 
-This module controls d&b audiotechnik DS100 and DS100M DSP devices using the OSC protocol over UDP.
+This module controls d&b audiotechnik DS100, DS100M and DS110 DSP devices using the OSC protocol over UDP.
 
 ## Supported Devices
 
--   **DS100** – En-Scene and En-Space DSP/matrix device with Dante audio networking. Supports up to 128 inputs and 64 outputs depending on scalable I/O option.
+-   **DS100** – En-Scene and En-Space DSP/matrix device with Dante audio networking. Supports up to 128 inputs at 48 kHz or 64 inputs at 96 kHz and 64 outputs, depending on scalable I/O option.
 -   **DS100M** – En-Scene and En-Space DSP/matrix device with Milan™/AES67 and MADI audio networking. Supports the same matrix sizes as the DS100 and additionally 96 kHz at Extra-large capacity.
+-   **DS110** – En-Scene and En-Space DSP/matrix device with Dante and MADI audio networking. Supports up to 128 Dante inputs at 96 kHz alongside MADI connectivity with up to 128 inputs and 64 outputs at 48 or 96 kHz.
 
 The module automatically queries the active matrix size from the device at startup and adapts accordingly. This requires firmware V3.00.01 or later. You can also configure the expected matrix size manually to prepare actions and variables before the device is online.
 
 ## Scalable I/O options
 
-The DS100 Signal Engine comprises an audio matrix with scalable I/O options:
+The DS100/DS110 Soundscape processing engine comprises an audio matrix with scalable I/O options:
 
-| Size | Inputs | Outputs | DS100 sample rates | DS100M sample rates |
-|---|---|---|---|---|
-| **S** – Small | 64 | 24 | 48 kHz, 96 kHz | 48 kHz, 96 kHz |
-| **L** – Large | 64 | 64 | 48 kHz, 96 kHz | 48 kHz, 96 kHz |
-| **XL** – Extra-large | 128 | 64 | 48 kHz | 48 kHz, 96 kHz |
+| Size | Inputs | Outputs | DS100 sample rates | DS100M sample rates | DS110 sample rates | 
+|---|---|---|---|---|---|
+| **S** – Small | 64 | 24 | 48 kHz, 96 kHz | 48 kHz, 96 kHz | 48 kHz, 96 kHz |
+| **L** – Large | 64 | 64 | 48 kHz, 96 kHz | 48 kHz, 96 kHz | 48 kHz, 96 kHz |
+| **XL** – Extra-large | 128 | 64 | 48 kHz | 48 kHz, 96 kHz | 48 kHz, 96 kHz |
 
 ## Configuration
 
